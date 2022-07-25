@@ -46,7 +46,7 @@
 -   ## User Log:
     -   ID SERIAL PRIMARY KEY,
     -   User-Mod ID INTEGER FOREIGN KEY,
-    -   Date Added, TIMESTAMP FOREIGN KEY,
+    -   Date Added, TIMESTAMP,
     -   Activity Type(rating, started playing, added mod, etc.)
     -   Description(Pre-written description describing what happened
                     ex. "User rated this mod 4 stars" or "user just removed this mod.") TEXT NOT NULL
