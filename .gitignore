@@ -2,5 +2,5 @@ venv/
 __pycache__/
 .vscode/
 credentials.py
-plans.txt
+plans.md
 .env

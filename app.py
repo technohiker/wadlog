@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from re import search
 
 from flask import Flask, render_template, request, flash, redirect, jsonify, session, g
+from models import connect_db
 
 app = Flask(__name__)
 

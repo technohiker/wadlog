@@ -58,3 +58,7 @@
     -   Text, TEXT NOT NULL
 -   ## Questions:
     -   What is the best way of handling the record vs each log of a record?
+
+
+# Image Sources:
+-   Default user image: https://feedback.seekingalpha.com/s/cache/8d/84/8d844a1bb966f7012aec20276f0e4283.png
