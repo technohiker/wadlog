@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, date
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -40,19 +40,19 @@ class Users(db.Model):
     date_joined = db.Column(
         db.Date,
         nullable=False,
-        deault=datetime.utcnow())
+        default=datetime.utcnow())
 
     image_url = db.Column(
         db.Text,
         default='/static/images/default_profile.png')
 
-    comments = db.relationship('comments')
+  #  comments = db.relationship('comments')
 
-    user_mods = db.relationship('user_mods')
+  #  user_mods = db.relationship('user_mods')
 
-    user_logs = db.relationship('user_logs',
-        secondary='user_mods'
-        )
+  #  user_logs = db.relationship('user_logs',
+  #      secondary='user_mods'
+  #      )
 
     #Register user.
     @classmethod
@@ -106,7 +106,8 @@ class Mods(db.Model):
 
     file_id = db.Column(
         db.Integer,
-        nullable=False
+        nullable=False,
+        unique=True
     )
 
     url = db.Column(
@@ -125,6 +126,7 @@ class Mods(db.Model):
 
     date_updated = db.Column(
         db.Date,
+        default=datetime.now().strftime('%Y-%m-%d'),
         nullable=False
     )
 
@@ -174,6 +176,7 @@ class User_Mods(db.Model):
 
     date_added = db.Column(
         db.Date,
+        default=datetime.utcnow(),
         nullable=False
     )
 
@@ -195,9 +198,9 @@ class User_Mods(db.Model):
         nullable=False
     )
 
-    users = db.relationship('users')
+    user = db.relationship('Users',backref='user_mods')
 
-    mods = db.relationship('mods')
+    mod = db.relationship('Mods',backref='user_mods')
 
 class User_Logs(db.Model):
 
@@ -222,7 +225,7 @@ class User_Logs(db.Model):
     )
 
     activity_type = db.Column(
-        db.DateTime,
+        db.Text,
         nullable=False #Should probably be enum.
     )
 
@@ -231,18 +234,18 @@ class User_Logs(db.Model):
         nullable=False
     )
 
-    user = db.relationship(
-        'users',
-        secondary='user_mods'
-    )
+ #   user = db.relationship('Users',secondary='user_mods', backref='user_logs')
+    user_mod = db.relationship('User_Mods',backref='user_logs')
+  #  mod = db.relationship('Mods', secondary='user_mods',backref='user_logs')
 
-class Comment(db.Model):
+  # Enabling the above relationships causes SQLAlchemy warnings about conflicting relationships.
+
+class Comments(db.Model):
 
     __tablename__ = 'comments'
 
     def __repr__(self):
-        return f'<Comment: #{self.id} User ID: #{self.user_id}, Target User: #{self.target_user}, \
-        {self.time}, {self.text}'
+        return f'<Comment: #{self.id} User ID: #{self.user_id}, Target User: #{self.target_user}, {self.time}, {self.text}'
 
 
     id = db.Column(
@@ -262,6 +265,7 @@ class Comment(db.Model):
 
     time = db.Column(
         db.DateTime,
+        default=datetime.utcnow(),
         nullable=False
     )
 
@@ -270,31 +274,4 @@ class Comment(db.Model):
         nullable=False
     )
 
-    users = db.relationship('users')
-    
-
-
-# class Cupcakes(db.Model):
-
-#     __tablename__ = 'Cupcakes'
-
-#     id = db.Column(db.Integer,
-#                     primary_key=True,
-#                     autoincrement=True)
-#     flavor = db.Column(db.Text,
-#                     nullable=False)
-#     size = db.Column(db.Text,
-#                     nullable=False)
-#     rating = db.Column(db.Float,
-#                     nullable=False)
-#     image = db.Column(db.Text)
-
-#     def serialize(self):
-#         """Returns a JSON-compatible object.  In this case, a dictionary."""
-#         return {
-#             'id': self.id,
-#             'flavor': self.flavor,
-#             'size': self.size,
-#             'rating': self.rating,
-#             'image': self.image
-#         }
+    users = db.relationship('Users',backref='comments',foreign_keys=user_id)

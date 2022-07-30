@@ -62,3 +62,6 @@
 
 # Image Sources:
 -   Default user image: https://feedback.seekingalpha.com/s/cache/8d/84/8d844a1bb966f7012aec20276f0e4283.png
+
+# Lessons Learned:
+-   Secondary argument of SQLAlchemy relationships should only be used if many-to-many table exists solely to connect two tables together.

@@ -1,7 +1,7 @@
 #Copied & Pasted from Springboard's provided Seed file.
 
 from app import app
-from models import db, Users, Mods, User_mods, User_logs, Comment
+from models import db, Users, Mods, User_Mods, User_Logs, Comments
 
 
 db.drop_all()
@@ -22,6 +22,9 @@ u2 = {
     "password": "HASHED_PASSWORD_2",
     "image_url": "https://cdn1.epicgames.com/salesEvent/salesEvent/EGS_Quake_idSoftwareNightdiveStudios_S2_1200x1600-79b408b699f55b5ca6014447ef556226"
 }
+
+db.session.add_all([Users(**u1),Users(**u2)])
+db.session.commit()
 
 #Mods(3)
 
@@ -54,7 +57,7 @@ m2 = {
 
 m3 = {
     "title": "ALIENS Total Conversion",
-    "file_id": 13600,
+    "file_id": 1038,
     "url": "https://www.doomworld.com/idgames/themes/aliens/alientc1",
     "description": '',
     "date_uploaded": "1994-11-03",
@@ -64,6 +67,9 @@ m3 = {
     "rating": 3.4352,
     "rating_count": 108
 }
+
+db.session.add_all([Mods(**m1),Mods(**m2),Mods(**m3)])
+db.session.commit()
 
 #User_Mods(4)
 um1 = {
@@ -103,6 +109,9 @@ um4 = {
     "play_status": '',
     "now_playing": False
 }
+
+db.session.add_all([User_Mods(**um1),User_Mods(**um2),User_Mods(**um3),User_Mods(**um4)])
+db.session.commit()
 
 #User_Logs(9)
 
@@ -171,6 +180,12 @@ ul9 = {
     "activity_type": 'Deleted Mod',
     "description": 'User2 deleted Hell Revealed.'
 }
+
+db.session.add_all([User_Logs(**ul1),User_Logs(**ul2),User_Logs(**ul3),
+    User_Logs(**ul4),User_Logs(**ul5),User_Logs(**ul6),User_Logs(**ul7),
+    User_Logs(**ul8),User_Logs(**ul9)])
+db.session.commit()
+
 #Comments(3)
     #User1 comments on User2's mod pick.
     #User2 responds saying that he was disappointed.
@@ -192,6 +207,9 @@ c3 = {
     "target_user": 2,
     "text": "Aw, that's fair.  It's an acquired taste."
 }
+
+db.session.add_all([Comments(**c1),Comments(**c2),Comments(**c3)])
+db.session.commit()
 
 # c1 = Cupcakes(
 #     flavor="cherry",
