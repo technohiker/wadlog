@@ -13,8 +13,8 @@ class GetModsForm(FlaskForm):
 
     query = StringField('Search',validators=[InputRequired(),Length(min=3)])
     type = SelectField('Type',choices=[
-        ['filename','Filename'],
         ['title','Title'],
+        ['filename','Filename'],
         ['author','Author'],
         ['e-mail','E-mail'],
         ['description','Description'],

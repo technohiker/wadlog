@@ -15,47 +15,29 @@
 
     </form>
 
-    
-<!--
-    <form name="formSearch" id="formSearch" method="POST">
-
-        <p>
-            Search
-            <input id="query" minlength="3" name="query" required="" type="text">
-            in
-            <select id="type" name="type">
-                <option value="title">Title</option>
-                <option value="filename">Filename</option>
-                <option value="author">Author</option>
-                <option value="e-mail">E-mail</option>
-                <option value="description">Description</option>
-                <option value="credits">Credits</option>
-                <option value="editors">Editors</option>
-                <option value="whole textfile">Whole_textfile</option>
-            </select>
-        </p>
-
-        <p>
-            Sort
-            <select id="sort" name="sort">
-                <option value="date">Date</option>
-                <option value="filename">Filename</option>
-                <option value="author">Author</option>
-                <option value="title">Title</option>
-                <option value="size">Size</option>
-                <option value="rating">Rating</option>
-            </select>
-            <select id="dir" name="dir">
-                <option value="desc">desc</option>
-                <option value="asc">asc</option>
-            </select>
-        </p>
-        <button class="btn btn-success" type="submit">Submit</button>
-    </form>
--->
     <div id="modContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
+    {% raw %} <!--Tells Jinja to ignore this code.-->
+    <script id="htmlTemplate" type="text/x-handlebars-template">
+        {{#each file}}
+            <h2><a href="{{url}}">{{title}}</a></h2>
+            <p>{{author}}</p>
+            {{#if votes}}
+                <p>{{rating}}</p>
+            {{/if}}
+        {{/each}}
+
+    </script>
+    {% endraw %}
+
 
 <script src="/static/app.js"></script>
 {% endblock %}
 
-# Add axios to submit.
+# In the Search page, I will make a call to Idgames, and that will use Axios to return
+JSON that will be transformed into a mod object via JavaScript.
+
+# In the Mods page, I will be pulling mod info for each mod from the database.
+  This info will be passed from the database, into Flask, and loaded in Jinja.

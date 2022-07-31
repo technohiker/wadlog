@@ -8,8 +8,13 @@ const f_dir = document.querySelector('#dir')
 
 searchForm.addEventListener('submit', function(e){
     e.preventDefault()
-    pullMod(e)
+    searchEvent(e)
 })
+
+async function searchEvent(e){
+    data = await pullMod(e)
+    makeModObject(data)
+}
 
 async function pullMod(e){
 
@@ -20,26 +25,31 @@ async function pullMod(e){
     let sort = f_sort.value;
     let dir = f_dir.value;
 
-    console.log(`${uri}?action=search
-    &query=${query}&type=${type}&sort=${sort}&dir=${dir}`)
-/*
-    response = axios.get(`${uri}?action=search
-        &query=${query}&type=${type}&sort=${sort}&dir=${dir}`)
-*/
-
     response = await axios.post('/search',{
         query: query,
         type: type,
         sort: sort,
         dir: dir
     })
-    console.log(response.data)
+
+    return response.data.content
+}
+
+function makeModObject(json){
+    console.log(json)
+        //Experimenting with Handlebars.
+        let hbTemplate = document.getElementById('htmlTemplate').innerHTML
+        let compiledHTML = Handlebars.compile(hbTemplate)
+        let generatedHTML = compiledHTML(json)
+
+        modContainer.innerHTML = generatedHTML
+
+  //  }
 }
 
 
-/* Mod call workflow:
 
-- Will WTForms go off even with e.PreventDefault?
+/* Mod call workflow:
 
 - Make Axios call to get JSON from Idgames.
 - Add this particular mod file to mod container below search.

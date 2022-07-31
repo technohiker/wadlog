@@ -46,13 +46,15 @@ class Users(db.Model):
         db.Text,
         default='/static/images/default_profile.png')
 
-  #  comments = db.relationship('comments')
+    #user_mods = db.relationship('user_mods')
 
-  #  user_mods = db.relationship('user_mods')
+  #  comments = db.relationship('comments')
 
   #  user_logs = db.relationship('user_logs',
   #      secondary='user_mods'
   #      )
+
+  # [print(log) for log in mod.user_logs for mod in user1.user_mods]
 
     #Register user.
     @classmethod
@@ -234,7 +236,7 @@ class User_Logs(db.Model):
         nullable=False
     )
 
- #   user = db.relationship('Users',secondary='user_mods', backref='user_logs')
+  #  user = db.relationship('Users',secondary='user_mods', backref='user_logs')
     user_mod = db.relationship('User_Mods',backref='user_logs')
   #  mod = db.relationship('Mods', secondary='user_mods',backref='user_logs')
 
