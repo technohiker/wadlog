@@ -2,13 +2,16 @@ import os
 from dotenv import load_dotenv
 from re import search
 from datetime import date
+from sqlalchemy.exc import IntegrityError
 
 import requests
 import json
 
-from flask import Flask, render_template, request, flash, redirect, jsonify, session, g
-from models import connect_db, Mods, db
-from forms import GetModsForm
+from flask import Flask, make_response, render_template, request, flash, redirect, jsonify, session, g
+from models import connect_db, Mods, Users, db
+from forms import GetModsForm, RegistrationForm, LoginForm
+
+CURR_USER_KEY = 'current_user'
 
 load_dotenv()
 
@@ -44,24 +47,24 @@ def create_mod(m_json):
         rating_count=m_json['votes']
         )
 
-# uri = 'https://www.doomworld.com/idgames/api/api.php'
-# query = 'hell revealed'
-# api_type = 'title'
-# sort = 'asc'
+@app.before_request
+def global_user():
+    """Set current user to Flask's global object."""
+    if CURR_USER_KEY in session:
+        g.user = Users.query.get(session[CURR_USER_KEY])
+    else:
+        g.user = None
 
-# response = requests.get(f'{uri}?action=search&query={query}&type={api_type}&dir={sort}&out=json')
+def do_login(user):
+    """Log in user."""
 
-# data = str(response.content)
+    session[CURR_USER_KEY] = user.id
 
-# json_data = json.loads(response.content)
-# print(json_data['content']['file'][0]['dir'].partition('/')[0])
+def do_logout():
+    """Log out user."""
 
-# hr_e1 = json_data['content']['file'][0]
-
-# new_mod = create_mod(hr_e1)
-
-# db.session.add(new_mod)
-# db.session.commit()
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
 
 
 @app.route('/search',methods=['GET','POST'])
@@ -81,3 +84,82 @@ def front_page():
 
     
     return render_template('search.html',form=form)
+
+@app.route('/register',methods=['GET','POST'])
+def register():
+    """Add a new user to database."""
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        try:
+            new_user = Users.signup(
+                username= form.username.data,
+                email = form.email.data,
+                password=form.password.data,
+                image_url=form.image_url.data
+            )
+            print(Users.query.all())
+            db.session.commit()
+            print('Success')
+
+            return redirect('/search')
+
+        except IntegrityError:
+            flash("Username already taken", 'danger')
+            print('Failure')
+            return render_template('register.html', form=form)
+    
+    return render_template('register.html',form=form)
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    if(request.cookies['user']):
+        return redirect('/search')
+    
+
+    form = LoginForm()
+
+    print(request.form)
+
+    if form.validate_on_submit():
+        user = Users.authenticate(form.username.data,
+                                 form.password.data)
+        if user:
+            do_login(user)
+            flash(f"Welcome, {user.username}!", "success")
+
+            response = make_response()
+            response.location = '/search'
+            response.status_code = 302
+            response.set_cookie('user',user.username)
+            response.set_cookie('password',user.password)
+            # return jsonify({
+            #     "login": "Success"
+            # })
+
+            return response
+
+          #  return redirect("/search").set_cookie('user',user.username)
+
+        flash("Invalid credentials.", 'danger')
+
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    """Log out user on Flask side, then return JSON to clear out LocalStorage."""
+
+    do_logout()
+
+    return jsonify(
+        {"logout": "Success"}
+    )
+
+@app.route('/api/login_status',methods=['GET'])
+def login_status():
+    if CURR_USER_KEY in session:
+        return jsonify({"status": "True"})
+
+    return jsonify({"status": "False"})

@@ -22,11 +22,19 @@
     {% raw %} <!--Tells Jinja to ignore this code.-->
     <script id="htmlTemplate" type="text/x-handlebars-template">
         {{#each file}}
-            <h2><a href="{{url}}">{{title}}</a></h2>
+        <div>
+            <h2><a href="{{url}}" id="{{id}}" class="title">{{title}}</a></h2>
             <p>{{author}}</p>
+            <p>{{date}}</p>
+            <p>{{description}}</p>
             {{#if votes}}
                 <p>{{rating}}</p>
+                <p>{{votes}}</p>
             {{/if}}
+            <!--Use Local Storage to check whether to add these buttons?-->
+            <button onclick="pullMod()" class="modButton">Pull Mod</button>
+            <button onclick="addMod()" class="modButton">Add Mod</button>
+        </div>
         {{/each}}
 
     </script>

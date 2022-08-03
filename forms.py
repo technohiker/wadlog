@@ -1,6 +1,8 @@
+from ast import Pass
+import email
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, FloatField
-from wtforms.validators import InputRequired, Length
+from wtforms import StringField, SelectField, FloatField, EmailField, PasswordField
+from wtforms.validators import InputRequired, Length, Email
 
 class AddCupcakeForm(FlaskForm):
 
@@ -8,6 +10,18 @@ class AddCupcakeForm(FlaskForm):
     size = StringField('Size',validators=[InputRequired()])
     rating = FloatField('Rating(1 to 10)',validators=[InputRequired()])
     image = StringField('Image URL',validators=[InputRequired()])
+
+class RegistrationForm(FlaskForm):
+
+    email = EmailField('E-mail',validators=[InputRequired(),Email()])
+    username = StringField('Username',validators=[InputRequired()])
+    password = PasswordField('Password',validators=[InputRequired()])
+    image_url = StringField('Profile Picture URL')
+
+class LoginForm(FlaskForm):
+
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
 
 class GetModsForm(FlaskForm):
 

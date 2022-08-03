@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
+    <header>
+        {% if g.user %}
+            <a href="/users/{{g.user.id}}">User Profile</a>
+            <button onclick="logout()">Logout</button>
+        {% else %}
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        {% endif %}
+    </header>
     {% for msg in get_flashed_messages() %}
     <p>{{msg}}</p>
     {% endfor %}
