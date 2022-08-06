@@ -35,6 +35,11 @@ def create_mod(m_json):
 
     category = m_json['dir'].partition('/')[0]
 
+    rating = m_json['rating'] if 'rating' in m_json else 0\
+
+    votes = m_json['votes'] if 'votes' in m_json else 0
+
+
     return Mods(
         title=m_json['title'],
         file_id=m_json['id'],
@@ -43,8 +48,8 @@ def create_mod(m_json):
         date_uploaded=m_json['date'],
         author=m_json['author'],
         category=category,
-        rating=m_json['rating'],
-        rating_count=m_json['votes']
+        rating=rating,
+        rating_count=votes
         )
 
 @app.before_request
@@ -89,6 +94,9 @@ def front_page():
 def register():
     """Add a new user to database."""
 
+    if('user' in request.cookies):
+        return redirect('/search')
+
     form = RegistrationForm()
     if form.validate_on_submit():
         try:
@@ -101,6 +109,8 @@ def register():
             print(Users.query.all())
             db.session.commit()
             print('Success')
+
+            do_login(new_user)
 
             return redirect('/search')
 
@@ -115,13 +125,14 @@ def register():
 def login():
     """Handle user login."""
 
-    if(request.cookies['user']):
+    if('user' in request.cookies):
         return redirect('/search')
     
+    print(request)
+    print(request.data)
+    print(request.form)
 
     form = LoginForm()
-
-    print(request.form)
 
     if form.validate_on_submit():
         user = Users.authenticate(form.username.data,
@@ -135,13 +146,7 @@ def login():
             response.status_code = 302
             response.set_cookie('user',user.username)
             response.set_cookie('password',user.password)
-            # return jsonify({
-            #     "login": "Success"
-            # })
-
             return response
-
-          #  return redirect("/search").set_cookie('user',user.username)
 
         flash("Invalid credentials.", 'danger')
 
@@ -153,9 +158,7 @@ def logout():
 
     do_logout()
 
-    return jsonify(
-        {"logout": "Success"}
-    )
+    return redirect('/search')
 
 @app.route('/api/login_status',methods=['GET'])
 def login_status():
@@ -163,3 +166,37 @@ def login_status():
         return jsonify({"status": "True"})
 
     return jsonify({"status": "False"})
+
+@app.route('/api/add_mod',methods=['POST'])
+def add_mod():
+    print(request)
+    print(request.data)
+    print(type(request.data))
+
+    mod_data = json.loads(request.data)
+
+    mod_check = Mods.query.filter_by(file_id=mod_data['id']).first()
+
+    if(mod_check):
+        return jsonify({
+            "status": "Already pulled."
+        })
+    mod = create_mod(json.loads(request.data))
+    db.session.add(mod)
+    db.session.commit()
+    return jsonify({
+        "status": "Success"
+    })
+
+@app.route('/mods',methods=['GET'])
+def mod_list():
+    mods = Mods.query.all()
+    return render_template('mods.html',mods=mods)
+
+@app.route('/mods/<int:mod_id>',methods=['GET'])
+def get_mod(mod_id):
+    mod = Mods.query.get(mod_id)
+    print(mod)
+    print(g.user.user_mods)
+    print(mod in g.user.user_mods)
+    return render_template('mod.html',mod=mod)

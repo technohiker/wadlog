@@ -1,0 +1,10 @@
+{% from 'macros.html' import create_mod_object with context %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for mod in mods %}
+        {{ create_mod_object(mod) }}
+    {% endfor %}
+
+{% endblock %}

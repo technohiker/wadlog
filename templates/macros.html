@@ -1,7 +1,16 @@
-<!--
 
-{% macro insert_name_here(insert parameters here) %}
 
-{% endmacro %}
-
--->
+    {% macro create_mod_object(mod) %}
+        <p>vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv</p>
+        <p id="url">{{mod.url}}</p>
+        <p id="dir">{{mod.dir}}</p>
+        <a href="mod/{{mod.id}}" id="title" class="title" name="title">{{mod.title}}</a>
+        <p id="author">{{mod.author}}</p>
+        <p id="date">{{mod.date}}</p>
+        <p id="description">{{mod.description}}</p>
+        {% if mod.rating > 0 %}
+            <p id="rating">{{mod.rating}}</p>
+            <p id="votes">{{mod.votes}}</p>
+        {% endif %}
+        <p>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
+    {% endmacro %}

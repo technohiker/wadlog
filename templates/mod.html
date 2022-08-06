@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <p id="dir">{{mod.category}}</p>
+    <a href="mod/{{mod.url}}" id="title">{{mod.title}}</a>
+    <p id="author">Author: {{mod.author}}</p>
+    <p id="date_uploaded">{{mod.date_uploaded}}</p>
+    <p id="date_updated">{{mod.date_updated}}</p>
+    <p id="description">{{mod.description}}</p>
+    <p id="rating">Rating: {{mod.rating}}   Votes: {{mod.rating_count}}</p>
+
+        <button onclick=addMod()>Add Mod</button>
+
+    {% if mod in g.user.user_mods %}
+
+    {% endif %}
+
+    <script src="/static/mod.js"></script>
+
+{% endblock %}

@@ -6,6 +6,8 @@ const f_type = document.querySelector('#type')
 const f_sort = document.querySelector('#sort')
 const f_dir = document.querySelector('#dir')
 
+console.log(document.cookie)
+
 searchForm.addEventListener('submit', function(e){
     e.preventDefault()
     searchEvent(e)
@@ -13,16 +15,8 @@ searchForm.addEventListener('submit', function(e){
 
 async function searchEvent(e){
     data = await showMods(e)
+    modContainer.innerHTML = ''
     makeModObject(data)
-}
-
-async function logout(e){
-    response = await axios.get('/logout')
-    if(response.data.logout == 'Success'){
-        localStorage.removeItem('userID')
-        document.location.href = '/search'
-    }
-
 }
 
 async function showMods(e){
@@ -55,17 +49,40 @@ async function makeModObject(json){
 
         modContainer.innerHTML = generatedHTML
 
-        response = await axios.get('/api/login_status')
         buttons = document.querySelectorAll('.modButton')
-        if(response.data.status == 'False'){
             for(i = 0; i < buttons.length; i++){
-                buttons[i].style.visibility = 'hidden'
-            }
+                if(!document.cookie.includes('user')){
+                    buttons[i].style.visibility = 'hidden'
+                }
+                else{
+                    buttons[i].addEventListener('click',clickEventListener)
+                }
         }
-
 }
 
-function pullMod(){
+function clickEventListener(e){
+    e.preventDefault()
+    if(e.target.classList.contains('pullMod')){
+        pullMod(e.target.parentElement,e.target)
+    }
+    else if(e.target.classList.contains('addMod')){
+        addMod(e.target.parentElement)
+    }
+}
+
+async function pullMod(modForm,button){
+    json = await jsonBuilder(modForm)
+    console.log(json)
+
+    response = await axios.post('/api/add_mod', json)
+
+    console.log(response.data.status)
+
+    if(response.data.status == "Success"){
+        button.innerText = "Pulled!"
+        button.disabled = true
+    }
+    button.classList.toggle('buttonPressed')
     // -When button is clicked, make a call to the server to add all the mod info in.
     // -Organize mod object so you can properly pass the info in.
     // -Send Flask request with mod json data.
@@ -73,12 +90,24 @@ function pullMod(){
     // -Flash to show user that it was pulled.
 }
 
-function addMod(){
+async function addMod(modForm){
+    console.log(modForm)
 //     -When button is clicked, check if mod is in records.  If not, add it.
 //     -Return mod ID regardless.
 //  -Make a call to the server to make a mod_record page.  Use aforementioned mod id.
 
 }
+
+function jsonBuilder(obj){
+    let json = {};
+    for(i = 0; i < obj.children.length; i++){
+        child = obj.children[i]
+        if(!child.classList.contains('modButton'))
+        json[child.id] = child.innerHTML
+    }
+    return json
+}
+
 /*
 
 For both buttons, only add if user is logged in.

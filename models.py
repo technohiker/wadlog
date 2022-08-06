@@ -146,7 +146,7 @@ class Mods(db.Model):
     )
 
     rating = db.Column(
-        db.Integer,
+        db.Float,
         default=0
     )
 
