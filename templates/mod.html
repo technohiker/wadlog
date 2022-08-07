@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div id="modInfo" mod_id="{{mod.id}}">
+        <p id="dir">{{mod.category}}</p>
+        <a href="mod/{{mod.url}}" id="title">{{mod.title}}</a>
+        <p id="author">Author: {{mod.author}}</p>
+        <p id="date_uploaded">{{mod.date_uploaded}}</p>
+        <p id="date_updated">{{mod.date_updated}}</p>
+        <p id="description">{{mod.description}}</p>
+        <p id="rating">Rating: {{mod.rating}}   Votes: {{mod.rating_count}}</p>
+        
+        <form action="{{ url_for('get_mod', mod_id = mod.id) }}" method="POST">
+            <button id="addModButton">Add Mod</button>
+        </form>
 
-    <p id="dir">{{mod.category}}</p>
-    <a href="mod/{{mod.url}}" id="title">{{mod.title}}</a>
-    <p id="author">Author: {{mod.author}}</p>
-    <p id="date_uploaded">{{mod.date_uploaded}}</p>
-    <p id="date_updated">{{mod.date_updated}}</p>
-    <p id="description">{{mod.description}}</p>
-    <p id="rating">Rating: {{mod.rating}}   Votes: {{mod.rating_count}}</p>
+    </div>
+    {% if g.user %}
+        {% if not mod in g.user.user_mods %}
 
-        <button onclick=addMod()>Add Mod</button>
-
-    {% if mod in g.user.user_mods %}
-
+        {% endif %}
     {% endif %}
 
     <script src="/static/mod.js"></script>

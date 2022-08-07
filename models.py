@@ -1,5 +1,6 @@
 
 from datetime import datetime, date
+from sqlalchemy import UniqueConstraint
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -195,17 +196,21 @@ class User_Mods(db.Model):
 
     play_status = db.Column(
         db.Text,
-        nullable=False #Should probably be enum.
+        nullable=False, #Should probably be enum.
+        default="Not Playing"
     )
 
     now_playing = db.Column(
         db.Boolean,
-        nullable=False
+        nullable=False,
+        default=False
     )
 
     user = db.relationship('Users',backref='user_mods')
 
     mod = db.relationship('Mods',backref='user_mods')
+
+    db.UniqueConstraint(user_id,mod_id,name='user_mod_unique')
 
 class User_Logs(db.Model):
 

@@ -8,7 +8,7 @@ import requests
 import json
 
 from flask import Flask, make_response, render_template, request, flash, redirect, jsonify, session, g
-from models import connect_db, Mods, Users, db
+from models import User_Mods, connect_db, Mods, Users, db
 from forms import GetModsForm, RegistrationForm, LoginForm
 
 CURR_USER_KEY = 'current_user'
@@ -193,10 +193,28 @@ def mod_list():
     mods = Mods.query.all()
     return render_template('mods.html',mods=mods)
 
-@app.route('/mods/<int:mod_id>',methods=['GET'])
+@app.route('/mods/<int:mod_id>',methods=['GET','POST'])
 def get_mod(mod_id):
     mod = Mods.query.get(mod_id)
     print(mod)
-    print(g.user.user_mods)
-    print(mod in g.user.user_mods)
+  #  print(g.user.user_mods)
+  #  print(mod in g.user.user_mods)
+    if(request.method == 'POST'):
+        print('Post Checked.')
+        if(g.user):
+            print('User Checked.')
+            user_mod = User_Mods(user_id=g.user.id,mod_id=mod_id)
+            print("User Mods: ",g.user.user_mods)
+
+            try:
+                db.session.add(user_mod)
+                db.session.commit()
+                print('Successfully added.')
+                flash('Mod successfully added!')
+            except IntegrityError as e:
+                print('Already exists.')
+                flash('This mod is already in your records.')
+                db.session.rollback()
+
+
     return render_template('mod.html',mod=mod)
