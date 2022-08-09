@@ -293,7 +293,9 @@ class Comments(db.Model):
         return {
             'id': self.id,
             'user_id': self.user_id,
+            'sender': self.sender.username,
             'target_user': self.target_user,
+            'receiver': self.receiver.username,
             'time': self.time,
             'text': self.text
         }

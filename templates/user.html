@@ -22,19 +22,19 @@
         {% for comment in comments %}
             <p>{{comment.sender.username}}: {{comment.text}} {{comment.time}}</p>
         {% endfor %}
-        {% if g.user %}
-            <h3>Write Comment:</h3>
-            <form id="commentForm" method="POST">
-                <textarea id="commentText"></textarea>
-                <button>Send Comment</button>
-            </form>
-        {% endif %}
     </div>
+    {% if g.user %}
+        <h3>Write Comment:</h3>
+        <form id="commentForm" method="POST">
+            <textarea id="commentText"></textarea>
+            <button>Send Comment</button>
+        </form>
+    {% endif %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
     <script src="/static/user.js"></script>
     {% raw %}
     <script id="commentTemplate" type="text/x-handlebars-template">
-            <p>{{text}}</p>
+            <p>{{sender}}: {{text}} {{time}}</p>
     </script>
     {% endraw %}
 

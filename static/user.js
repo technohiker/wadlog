@@ -21,7 +21,7 @@ async function postComment(text){
     htmlBuilder(response.data)
 }
 function htmlBuilder(comment){
-    console.log(comment.text)
+    console.log(comment)
     let hbTemplate = document.getElementById('commentTemplate').innerHTML
     let compiledHTML = Handlebars.compile(hbTemplate)
     let generatedHTML = compiledHTML(comment)

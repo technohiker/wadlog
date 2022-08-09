@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from re import search
-from datetime import date
+from datetime import date, datetime
 from sqlalchemy.exc import IntegrityError
 
 import requests
@@ -298,7 +298,11 @@ def edit_user(user_id):
 @app.route('/api/comments/add',methods=['POST'])
 def add_comment():
     data = json.loads(request.data)
-    comment = Comments(user_id=g.user.id,target_user=data['target_user'],text=data['comment'])
+    comment = Comments(
+        user_id=g.user.id,
+        target_user=data['target_user'],
+        text=data['comment'],
+        time=datetime.utcnow())
     db.session.add(comment)
     db.session.commit()
     print(data)
