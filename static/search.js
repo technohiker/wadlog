@@ -14,8 +14,10 @@ searchForm.addEventListener('submit', function(e){
 async function searchEvent(e){
     data = await showMods(e)
     modContainer.innerHTML = ''
-    obj = jsonFormat(data)
-    makeModObject(obj)
+    if(data.file.length == undefined){
+        data = jsonFormat(data)
+    }
+    makeModObject(data)
     hideButtons()
 }
 
@@ -41,18 +43,12 @@ async function showMods(e){
 function jsonFormat(json){
     //Create a list in order to work around API's structure limitations.
         //If one object is returned, you don't get a list, messing with loops.
-        let list = []
-        console.log(json)
-        if(json.file.length > 1){
-            for(obj of json.file){
-                list.push(obj)
-            }
-        }
-        else{
-            list.push(json.file)
-        }
-        let object = { list }
-        console.log(object)
+        //Array is still named 'file' in order to match the Handlebar template's syntax.
+        let file = []
+
+        file.push(json.file)
+        let object = { file }
+
         return object
 }
 
