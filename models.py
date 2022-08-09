@@ -47,15 +47,16 @@ class Users(db.Model):
         db.Text,
         default='/static/images/default_profile.png')
 
-    #user_mods = db.relationship('user_mods')
+    #records = db.relationship('records')
 
   #  comments = db.relationship('comments')
 
-  #  user_logs = db.relationship('user_logs',
-  #      secondary='user_mods'
+  #  logs = db.relationship('logs',
+  #      secondary='records'
   #      )
+  #  comments_rec = db.relationship('comments',foreign_keys='target_user')
 
-  # [print(log) for log in mod.user_logs for mod in user1.user_mods]
+  # [print(log) for log in mod.logs for mod in user1.records]
 
     #Register user.
     @classmethod
@@ -156,13 +157,13 @@ class Mods(db.Model):
         nullable=False
     )
 
-class User_Mods(db.Model):
+class Records(db.Model):
     """A user's record of a mod they own."""
 
-    __tablename__ = 'user_mods'
+    __tablename__ = 'records'
 
     def __repr__(self):
-        return f'<User_Mod: #{self.id} User: #{self.user_id}, Mod: #{self.mod_id}'
+        return f'<record: #{self.id} User: #{self.user_id}, Mod: #{self.mod_id}'
 
 
     id = db.Column(
@@ -206,27 +207,27 @@ class User_Mods(db.Model):
         default=False
     )
 
-    user = db.relationship('Users',backref='user_mods')
+    user = db.relationship('Users',backref='records',cascade="all, delete")
 
-    mod = db.relationship('Mods',backref='user_mods')
+    mod = db.relationship('Mods',backref='records',cascade="all, delete")
 
-    db.UniqueConstraint(user_id,mod_id,name='user_mod_unique')
+    db.UniqueConstraint(user_id,mod_id,name='record_unique')
 
-class User_Logs(db.Model):
+class Logs(db.Model):
 
-    __tablename__ = 'user_logs'
+    __tablename__ = 'logs'
 
     def __repr__(self):
-        return f'<User_Log: #{self.id} User_Mod: #{self.user_mod_id}, {self.activity_type}, {self.description}'
+        return f'<Log: #{self.id} record: #{self.record_id}, {self.activity_type}, {self.description}'
 
     id = db.Column(
         db.Integer,
         primary_key=True,
         autoincrement=True)
     
-    user_mod_id = db.Column(
+    record_id = db.Column(
         db.Integer,
-        db.ForeignKey('user_mods.id',ondelete='cascade')
+        db.ForeignKey('records.id',ondelete='cascade')
     )
     
     date_added = db.Column(
@@ -244,9 +245,9 @@ class User_Logs(db.Model):
         nullable=False
     )
 
-  #  user = db.relationship('Users',secondary='user_mods', backref='user_logs')
-    user_mod = db.relationship('User_Mods',backref='user_logs')
-  #  mod = db.relationship('Mods', secondary='user_mods',backref='user_logs')
+  #  user = db.relationship('Users',secondary='records', backref='logs')
+    record = db.relationship('Records',backref='logs',cascade="all, delete")
+  #  mod = db.relationship('Mods', secondary='records',backref='logs')
 
   # Enabling the above relationships causes SQLAlchemy warnings about conflicting relationships.
 
@@ -284,4 +285,15 @@ class Comments(db.Model):
         nullable=False
     )
 
-    users = db.relationship('Users',backref='comments',foreign_keys=user_id)
+    sender = db.relationship('Users',backref='comments',foreign_keys=user_id)
+    receiver = db.relationship('Users',backref='comments2',foreign_keys=target_user)
+
+    def serialize(self):
+        """Return a JSON object of the model."""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'target_user': self.target_user,
+            'time': self.time,
+            'text': self.text
+        }

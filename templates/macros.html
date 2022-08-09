@@ -1,9 +1,7 @@
-
-
     {% macro create_mod_object(mod) %}
         <p>vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv</p>
         <p id="url">{{mod.url}}</p>
-        <p id="dir">{{mod.dir}}</p>
+        <p id="category">{{mod.category}}</p>
         <a href="mod/{{mod.id}}" id="title" class="title" name="title">{{mod.title}}</a>
         <p id="author">{{mod.author}}</p>
         <p id="date">{{mod.date}}</p>
@@ -13,4 +11,12 @@
             <p id="votes">{{mod.votes}}</p>
         {% endif %}
         <p>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
+    {% endmacro %}
+
+    {% macro create_record_object(record) %}
+        <p>
+            <a href="{{ url_for('get_record', record_id = record.id) }}">
+                {{record.user.username}}: {{record.mod.title}}
+            </a>            
+        </p>
     {% endmacro %}

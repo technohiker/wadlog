@@ -6,8 +6,6 @@ const f_type = document.querySelector('#type')
 const f_sort = document.querySelector('#sort')
 const f_dir = document.querySelector('#dir')
 
-console.log(document.cookie)
-
 searchForm.addEventListener('submit', function(e){
     e.preventDefault()
     searchEvent(e)
@@ -16,7 +14,9 @@ searchForm.addEventListener('submit', function(e){
 async function searchEvent(e){
     data = await showMods(e)
     modContainer.innerHTML = ''
-    makeModObject(data)
+    obj = jsonFormat(data)
+    makeModObject(obj)
+    hideButtons()
 }
 
 async function showMods(e){
@@ -38,26 +38,48 @@ async function showMods(e){
     return response.data.content
 }
 
+function jsonFormat(json){
+    //Create a list in order to work around API's structure limitations.
+        //If one object is returned, you don't get a list, messing with loops.
+        let list = []
+        console.log(json)
+        if(json.file.length > 1){
+            for(obj of json.file){
+                list.push(obj)
+            }
+        }
+        else{
+            list.push(json.file)
+        }
+        let object = { list }
+        console.log(object)
+        return object
+}
+
 async function makeModObject(json){
-    console.log(json)
+
+
         //Experimenting with Handlebars.
         let hbTemplate = document.getElementById('htmlTemplate').innerHTML
         let compiledHTML = Handlebars.compile(hbTemplate)
         let generatedHTML = compiledHTML(json)
 
-     //   console.log(generatedHTML)
+      //  console.log(generatedHTML)
 
         modContainer.innerHTML = generatedHTML
+}
 
-        buttons = document.querySelectorAll('.modButton')
-            for(i = 0; i < buttons.length; i++){
-                if(!document.cookie.includes('user')){
-                    buttons[i].style.visibility = 'hidden'
-                }
-                else{
-                    buttons[i].addEventListener('click',clickEventListener)
-                }
+function hideButtons(){
+
+    buttons = document.querySelectorAll('.modButton')
+    for(i = 0; i < buttons.length; i++){
+        if(!document.cookie.includes('user')){
+            buttons[i].style.visibility = 'hidden'
         }
+        else{
+            buttons[i].addEventListener('click',clickEventListener)
+        }
+}
 }
 
 function clickEventListener(e){

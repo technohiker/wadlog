@@ -1,7 +1,7 @@
 from ast import Pass
 import email
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, FloatField, EmailField, PasswordField
+from wtforms import StringField, SelectField, FloatField, EmailField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired, Length, Email
 
 class AddCupcakeForm(FlaskForm):
@@ -45,3 +45,13 @@ class GetModsForm(FlaskForm):
         ['rating','Rating']
         ])
     dir = SelectField('Direction',choices=[['asc', 'Asc'],['desc','Desc']])
+
+class RecordForm(FlaskForm):
+    review = TextAreaField('Review')
+    user_notes = StringField('Notes')
+    play_status = SelectField('Play Status',choices=[
+        ['unplayed','Unplayed'],
+        ['played','Played'],
+        ['beaten','Beaten']
+    ])
+    now_playing = BooleanField('Now Playing')

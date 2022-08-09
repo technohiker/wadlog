@@ -21,7 +21,7 @@
 
     {% raw %} <!--Tells Jinja to ignore this code.-->
     <script id="htmlTemplate" type="text/x-handlebars-template">
-        {{#each file}}
+        {{#each list}}
         <form name="formMod" id="formMod-{{id}}" method="POST">
             <p id="id">{{id}}</p>
             <p id="url">{{url}}</p>
@@ -37,6 +37,8 @@
             <button class= "modButton pullMod">Pull Mod</button>
             <button class="modButton addMod">Add Mod</button>
         </form>
+        {{else}}
+            <p>No file found.  Please check if you typed your search in correctly.</p>
         {{/each}}
 
     </script>

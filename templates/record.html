@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="recordInfo" record_id="{{record.id}}">
+        <p><a href="{{ url_for('get_mod', mod_id = record.mod.id) }}" id="title">Mod: {{record.mod.title}}</a></p>
+        <p><a href="{{ url_for('get_user', user_id = record.user.id) }}">User: {{record.user.username}}</a></p>        
+        <p id="date_added">{{record.date_added}}</p>
+        <p id="user_notes">Notes: {{record.user_notes}}</p>
+        <p id="user_review">Review: {{record.user_review}}</p>
+        <p id="play_status">Play Status: {{record.play_status}}</p>
+
+    </div>
+    {% if g.user %}
+        <form action="{{ url_for('edit_record', record_id = record.id) }}" method="GET">
+            <button id="editRecordButton">Edit Record</button>
+        </form>
+        <form action="{{ url_for('delete_record', record_id = record.id) }}" method="POST">
+            <button id="deleteRecordButton" 
+                onclick="return confirm('Are you sure you want to delete this tag?');">
+                Delete Record
+            </button>
+        </form>
+    {% endif %}
+
+    <script src="/static/mod.js"></script>
+
+{% endblock %}

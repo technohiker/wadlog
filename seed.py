@@ -1,7 +1,7 @@
 #Copied & Pasted from Springboard's provided Seed file.
 
 from app import app
-from models import db, Users, Mods, User_Mods, User_Logs, Comments
+from models import db, Users, Mods, Records, Logs, Comments
 
 
 db.drop_all()
@@ -22,8 +22,7 @@ u2 = {
     "password": "HASHED_PASSWORD_2",
     "image_url": "https://cdn1.epicgames.com/salesEvent/salesEvent/EGS_Quake_idSoftwareNightdiveStudios_S2_1200x1600-79b408b699f55b5ca6014447ef556226"
 }
-
-db.session.add_all([Users(**u1),Users(**u2)])
+db.session.add_all([Users.signup(**u1),Users.signup(**u2)])
 db.session.commit()
 
 #Mods(3)
@@ -71,7 +70,7 @@ m3 = {
 db.session.add_all([Mods(**m1),Mods(**m2),Mods(**m3)])
 db.session.commit()
 
-#User_Mods(4)
+#Records(4)
 um1 = {
     "user_id": 1,
     "mod_id": 1,
@@ -110,10 +109,10 @@ um4 = {
     "now_playing": False
 }
 
-db.session.add_all([User_Mods(**um1),User_Mods(**um2),User_Mods(**um3),User_Mods(**um4)])
+db.session.add_all([Records(**um1),Records(**um2),Records(**um3),Records(**um4)])
 db.session.commit()
 
-#User_Logs(9)
+#Logs(9)
 
     #User1 got a mod.
     #User1 got another mod.
@@ -126,64 +125,64 @@ db.session.commit()
     #User2 deleted the second mod.
 
 ul1 = {
-    "user_mod_id": 1,
+    "record_id": 1,
     "date_added": '2022-01-03',
     "activity_type": 'Added Mod',
     "description": 'User added Scythe 2.'
 }
 
 ul2 = {
-    "user_mod_id": 2,
+    "record_id": 2,
     "date_added": '2022-01-03',
     "activity_type": 'Added Mod',
     "description": 'User added Hell Revealed'
 }
 ul3 = {
-    "user_mod_id": 1,
+    "record_id": 1,
     "date_added": '2022-01-03',
     "activity_type": 'Started Playing',
     "description": 'User started playing Scythe 2.'
 }
 ul4 = {
-    "user_mod_id": 1,
+    "record_id": 1,
     "date_added": '2022-01-03',
     "activity_type": 'Finished Playing',
     "description": 'User finished playing Scythe 2.'
 }
 ul5 = {
-    "user_mod_id": 1,
+    "record_id": 1,
     "date_added": '2022-01-03',
     "activity_type": 'Review',
     "description": 'User wrote a review for Scythe 2.'
 }
 ul6 = {
-    "user_mod_id": 3,
+    "record_id": 3,
     "date_added": '2022-01-03',
     "activity_type": 'Added Mod',
     "description": 'User2 added Hell Revealed.'
 }
 ul7 = {
-    "user_mod_id": 4,
+    "record_id": 4,
     "date_added": '2022-01-03',
     "activity_type": 'Added Mod',
     "description": 'User2 added ALIENS Total Conversion.'
 }
 ul8 = {
-    "user_mod_id": 3,
+    "record_id": 3,
     "date_added": '2022-01-03',
     "activity_type": 'Started Playing',
     "description": 'User2 started playing Hell Revealed.'
 }
 ul9 = {
-    "user_mod_id": 3,
+    "record_id": 3,
     "date_added": '2022-01-03',
     "activity_type": 'Deleted Mod',
     "description": 'User2 deleted Hell Revealed.'
 }
 
-db.session.add_all([User_Logs(**ul1),User_Logs(**ul2),User_Logs(**ul3),
-    User_Logs(**ul4),User_Logs(**ul5),User_Logs(**ul6),User_Logs(**ul7),
-    User_Logs(**ul8),User_Logs(**ul9)])
+db.session.add_all([Logs(**ul1),Logs(**ul2),Logs(**ul3),
+    Logs(**ul4),Logs(**ul5),Logs(**ul6),Logs(**ul7),
+    Logs(**ul8),Logs(**ul9)])
 db.session.commit()
 
 #Comments(3)

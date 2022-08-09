@@ -1,0 +1,10 @@
+{% from 'macros.html' import create_record_object with context %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for record in records %}
+        {{ create_record_object(record) }}
+    {% endfor %}
+
+{% endblock %}

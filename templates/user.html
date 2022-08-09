@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="userInfo" userid="{{user.id}}">
+        <p id="userName">Name: {{user.username}}</p>
+        <p id="dateJoined">Date Joined: {{user.date_joined}}</p>
+        <p><img src={{user.image_url}}></p>
+    </div>
+    {% if g.user %}
+    <form action="{{ url_for('edit_user', user_id = user.id) }}" method="GET">
+        <button id="editUserButton">Edit Profile</button>
+    </form>
+    {% endif %}
+    <div id="userRecords">
+        <h2>User's Mods</h2>
+        {% for record in user.records %}
+            <p>Title: {{record.mod.title}}</p>
+        {% endfor %}
+    </div>
+    <h2>Comments: </h2>
+    <div id="userComments">
+        {% for comment in comments %}
+            <p>{{comment.sender.username}}: {{comment.text}} {{comment.time}}</p>
+        {% endfor %}
+        {% if g.user %}
+            <h3>Write Comment:</h3>
+            <form id="commentForm" method="POST">
+                <textarea id="commentText"></textarea>
+                <button>Send Comment</button>
+            </form>
+        {% endif %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="/static/user.js"></script>
+    {% raw %}
+    <script id="commentTemplate" type="text/x-handlebars-template">
+            <p>{{text}}</p>
+    </script>
+    {% endraw %}
+
+{% endblock %}

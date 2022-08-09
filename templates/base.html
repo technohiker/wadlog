@@ -11,11 +11,15 @@
     <header>
         {% if g.user %}
             <a href="/users/{{g.user.id}}">User Profile</a>
-            <button onclick="logout()">Logout</button>
+            <form action="/logout", method="POST">
+                <button>Logout</button>
+            </form>
         {% else %}
             <a href="/register">Register</a>
             <a href="/login">Login</a>
         {% endif %}
+        <a href="/mods">Mods</a>
+        <a href="/search">Search</a>
     </header>
     {% for msg in get_flashed_messages() %}
     <p>{{msg}}</p>

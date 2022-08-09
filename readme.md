@@ -65,3 +65,4 @@
 
 # Lessons Learned:
 -   Secondary argument of SQLAlchemy relationships should only be used if many-to-many table exists solely to connect two tables together.
+-   Do not make names of models so similar.  Will cause confusion.

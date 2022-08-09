@@ -1,0 +1,17 @@
+{{ form.hidden_tag() }}
+<h2>Edit Record:</h2>
+<form method="POST" id="editRecordForm">
+    {{ form.hidden_tag() }}
+
+    {% for field in form 
+        if field.widget.input_type != 'hidden' %}
+    <p>
+        {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {{field.label}}
+        {{field}}
+    </p>
+    {% endfor %}
+    <button id="addButton">Submit</button>
+</form>

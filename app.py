@@ -8,8 +8,8 @@ import requests
 import json
 
 from flask import Flask, make_response, render_template, request, flash, redirect, jsonify, session, g
-from models import User_Mods, connect_db, Mods, Users, db
-from forms import GetModsForm, RegistrationForm, LoginForm
+from models import Records, connect_db, Mods, Users, Logs, db, Comments
+from forms import GetModsForm, RegistrationForm, LoginForm, RecordForm
 
 CURR_USER_KEY = 'current_user'
 
@@ -52,9 +52,19 @@ def create_mod(m_json):
         rating_count=votes
         )
 
+@app.before_first_request
+def check_cookies():
+    if('user' in request.cookies):
+        user = Users.query.filter_by(username=request.cookies['user']).first()
+        if(user):
+            do_login(user)
+    else:
+        do_logout()
+
 @app.before_request
 def global_user():
     """Set current user to Flask's global object."""
+
     if CURR_USER_KEY in session:
         g.user = Users.query.get(session[CURR_USER_KEY])
     else:
@@ -84,7 +94,6 @@ def front_page():
         dir = request.json['dir']
 
         response = requests.get(f'{uri}?action=search&query={query}&type={api_type}&sort={sort}&dir={dir}&out=json')
-        print(response.content)
         return json.loads(response.content)
 
     
@@ -106,17 +115,19 @@ def register():
                 password=form.password.data,
                 image_url=form.image_url.data
             )
-            print(Users.query.all())
             db.session.commit()
-            print('Success')
 
             do_login(new_user)
 
-            return redirect('/search')
+            response = make_response()
+            response.location = '/search'
+            response.status_code = 302
+            response.set_cookie('user',new_user.username)
+            response.set_cookie('password',new_user.password)
+            return response
 
         except IntegrityError:
             flash("Username already taken", 'danger')
-            print('Failure')
             return render_template('register.html', form=form)
     
     return render_template('register.html',form=form)
@@ -152,13 +163,19 @@ def login():
 
     return render_template('login.html', form=form)
 
-@app.route('/logout')
+@app.route('/logout',methods=['POST'])
 def logout():
     """Log out user on Flask side, then return JSON to clear out LocalStorage."""
 
     do_logout()
 
-    return redirect('/search')
+    response = make_response()
+    response.delete_cookie('user')
+    response.delete_cookie('password')
+    response.location = '/search'
+    response.status_code = 302
+
+    return response
 
 @app.route('/api/login_status',methods=['GET'])
 def login_status():
@@ -166,6 +183,9 @@ def login_status():
         return jsonify({"status": "True"})
 
     return jsonify({"status": "False"})
+
+###########################################
+# Mods
 
 @app.route('/api/add_mod',methods=['POST'])
 def add_mod():
@@ -195,26 +215,91 @@ def mod_list():
 
 @app.route('/mods/<int:mod_id>',methods=['GET','POST'])
 def get_mod(mod_id):
+    
     mod = Mods.query.get(mod_id)
-    print(mod)
-  #  print(g.user.user_mods)
-  #  print(mod in g.user.user_mods)
+    print(mod in g.user.records)
+    print([record.mod_id for record in g.user.records])
     if(request.method == 'POST'):
-        print('Post Checked.')
         if(g.user):
-            print('User Checked.')
-            user_mod = User_Mods(user_id=g.user.id,mod_id=mod_id)
-            print("User Mods: ",g.user.user_mods)
+            record = Records(user_id=g.user.id,mod_id=mod_id)
+            print("User Mods: ",g.user.records)
 
             try:
-                db.session.add(user_mod)
+                db.session.add(record)
                 db.session.commit()
-                print('Successfully added.')
                 flash('Mod successfully added!')
             except IntegrityError as e:
-                print('Already exists.')
                 flash('This mod is already in your records.')
                 db.session.rollback()
 
 
-    return render_template('mod.html',mod=mod)
+    return render_template('mod.html',mod=mod, IDs = [record.mod_id for record in g.user.records])
+
+###########################################
+# Records
+@app.route('/mods/<int:mod_id>/delete',methods=['POST'])
+def remove_record(mod_id):
+    if(g.user):
+        Records.query.filter_by(mod_id=mod_id,user_id=g.user.id).delete()
+    redirect(f'/mods/{mod_id}')
+
+@app.route('/records',methods=['GET'])
+def record_list():
+    records = Records.query.all()
+    return render_template('records.html',records=records)
+
+@app.route('/records/<int:record_id>',methods=['GET'])
+def get_record(record_id):
+    record = Records.query.get(record_id)
+    return render_template('record.html',record=record)
+
+@app.route('/records/<int:record_id>/edit',methods=['GET','POST'])
+def edit_record(record_id):
+    record = Records.query.get(record_id)
+    form = RecordForm(obj=record)
+
+    if form.validate_on_submit():
+        record.user_notes = form.user_notes.data
+        record.review = form.review.data
+        record.now_playing = form.now_playing.data
+        record.user_notes = form.user_notes.data
+
+        db.session.add(record)
+        db.session.commit()
+    
+        return redirect(f'/records/{record_id}')
+
+    return render_template('record_edit.html',form=form)
+
+@app.route('/records/<int:record_id>',methods=['POST'])
+def delete_record(record_id):
+    mod_id = Records.query.filter_by(id=record_id).first().mod_id
+    if(g.user):
+        Records.query.filter_by(id=record_id).delete()
+    redirect(f'/mods/{mod_id}')
+
+#########################################################
+# Users
+
+@app.route('/users/<int:user_id>',methods=['GET'])
+def get_user(user_id):
+    user = Users.query.get(user_id)
+    comments = Comments.query.filter_by(target_user=user_id)
+    return render_template('user.html',user=user,comments=comments)
+
+@app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
+def edit_user(user_id):
+    user = Users.query.get(user_id).first()
+    return render_template('user_edit.html',user=user)
+
+#########################################################
+# Comments
+
+@app.route('/api/comments/add',methods=['POST'])
+def add_comment():
+    data = json.loads(request.data)
+    comment = Comments(user_id=g.user.id,target_user=data['target_user'],text=data['comment'])
+    db.session.add(comment)
+    db.session.commit()
+    print(data)
+    return jsonify(comment.serialize())
