@@ -35,7 +35,7 @@ def create_mod(m_json):
 
     category = m_json['dir'].partition('/')[0]
 
-    rating = m_json['rating'] if 'rating' in m_json else 0\
+    rating = m_json['rating'] if 'rating' in m_json else 0
 
     votes = m_json['votes'] if 'votes' in m_json else 0
 
@@ -199,13 +199,15 @@ def add_mod():
 
     if(mod_check):
         return jsonify({
-            "status": "Already pulled."
+            "status": "Already pulled.",
+            "mod_id": mod_check.id
         })
     mod = create_mod(json.loads(request.data))
     db.session.add(mod)
     db.session.commit()
     return jsonify({
-        "status": "Success"
+        "status": "Success",
+        "mod_id": mod.id
     })
 
 @app.route('/mods',methods=['GET'])
@@ -217,8 +219,6 @@ def mod_list():
 def get_mod(mod_id):
     
     mod = Mods.query.get(mod_id)
-    print(mod in g.user.records)
-    print([record.mod_id for record in g.user.records])
     if(request.method == 'POST'):
         if(g.user):
             record = Records(user_id=g.user.id,mod_id=mod_id)
@@ -233,15 +233,16 @@ def get_mod(mod_id):
                 db.session.rollback()
 
 
-    return render_template('mod.html',mod=mod, IDs = [record.mod_id for record in g.user.records])
+    return render_template('mod.html',mod=mod)
 
 ###########################################
 # Records
 @app.route('/mods/<int:mod_id>/delete',methods=['POST'])
-def remove_record(mod_id):
+def delete_mod(mod_id):
     if(g.user):
-        Records.query.filter_by(mod_id=mod_id,user_id=g.user.id).delete()
-    redirect(f'/mods/{mod_id}')
+        Mods.query.filter_by(id=mod_id).delete()
+        flash('Mod successfully removed.')
+    return redirect(f'/mods/{mod_id}')
 
 @app.route('/records',methods=['GET'])
 def record_list():
@@ -250,46 +251,64 @@ def record_list():
 
 @app.route('/records/<int:record_id>',methods=['GET'])
 def get_record(record_id):
-    record = Records.query.get(record_id)
+    record = Records.query.get_or_404(record_id)
     return render_template('record.html',record=record)
 
 @app.route('/records/<int:record_id>/edit',methods=['GET','POST'])
 def edit_record(record_id):
-    record = Records.query.get(record_id)
+    record = Records.query.get_or_404(record_id)
     form = RecordForm(obj=record)
 
     if form.validate_on_submit():
-        record.user_notes = form.user_notes.data
-        record.review = form.review.data
+        record.user_notes = form.user_notes.data,
+        record.user_review = form.user_review.data
         record.now_playing = form.now_playing.data
-        record.user_notes = form.user_notes.data
+        record.play_status = form.play_status.data
 
         db.session.add(record)
         db.session.commit()
     
         return redirect(f'/records/{record_id}')
 
-    return render_template('record_edit.html',form=form)
+    return render_template('record_edit.html',form=form,record_id=record_id)
 
 @app.route('/records/<int:record_id>',methods=['POST'])
 def delete_record(record_id):
     mod_id = Records.query.filter_by(id=record_id).first().mod_id
     if(g.user):
         Records.query.filter_by(id=record_id).delete()
-    redirect(f'/mods/{mod_id}')
+        db.session.commit()
+    return redirect(f'/mods/{mod_id}')
+
+@app.route('/api/add_record/<int:mod_id>',methods=['POST'])
+def add_record(mod_id):
+    try:
+        record = Records(user_id=g.user.id,mod_id=mod_id)
+        print(record)
+        db.session.add(record)
+        db.session.commit()
+        return jsonify({
+            "status": "Added successfully!"
+        })
+    except IntegrityError as e:
+         db.session.rollback()
+         return jsonify({
+             "status": "Record already exists."
+         })
+    
 
 #########################################################
 # Users
 
 @app.route('/users/<int:user_id>',methods=['GET'])
 def get_user(user_id):
-    user = Users.query.get(user_id)
+    user = Users.query.get_or_404(user_id)
     comments = Comments.query.filter_by(target_user=user_id)
     return render_template('user.html',user=user,comments=comments)
 
 @app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
 def edit_user(user_id):
-    user = Users.query.get(user_id).first()
+    user = Users.query.get_or_404(user_id).first()
     return render_template('user_edit.html',user=user)
 
 #########################################################

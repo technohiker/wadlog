@@ -47,7 +47,7 @@ class GetModsForm(FlaskForm):
     dir = SelectField('Direction',choices=[['asc', 'Asc'],['desc','Desc']])
 
 class RecordForm(FlaskForm):
-    review = TextAreaField('Review')
+    user_review = TextAreaField('Review')
     user_notes = StringField('Notes')
     play_status = SelectField('Play Status',choices=[
         ['unplayed','Unplayed'],

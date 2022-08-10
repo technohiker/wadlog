@@ -157,6 +157,21 @@ class Mods(db.Model):
         nullable=False
     )
 
+    def serialize(self):
+        """Return a JSON object of the model."""
+        return {
+            'id': self.id,
+            'file_id': self.file_id,
+            'url': self.url,
+            'description': self.description,
+            'date_uploaded': self.date_uploaded,
+            'date_updated': self.date_updated,
+            'author': self.author,
+            'category': self.category,
+            'rating': self.rating,
+            'count': self.count
+        }
+
 class Records(db.Model):
     """A user's record of a mod they own."""
 

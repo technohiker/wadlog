@@ -11,11 +11,20 @@
         <p id="rating">Rating: {{mod.rating}}   Votes: {{mod.rating_count}}</p>
 
     </div>
+    <div>
+        <h2>Records:</h2>
+        {% for record in mod.records %}
+            <p><a href="{{ url_for('get_record', record_id = record.id) }}">{{record.user.username}} - {{mod.title}}</a></p>
+        {% endfor %}
+    </div>
     {% if g.user %}
         <form action="{{ url_for('get_mod', mod_id = mod.id) }}" method="POST">
-            <button id="addModButton">Add Mod</button>
+            <button id="addModButton">Add to Records</button>
         </form>
     {% endif %}
+    <form action="{{ url_for('mod_list')}}", method="GET">
+        <button>Back</button>
+    </form>
 
     <script src="/static/mod.js"></script>
 

@@ -2,7 +2,7 @@
         <p>vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv</p>
         <p id="url">{{mod.url}}</p>
         <p id="category">{{mod.category}}</p>
-        <a href="mods/{{mod.id}}" id="title" class="title" name="title">{{mod.title}}</a>
+        <a href="{{ url_for('get_mod', mod_id = mod.id) }}" id="title" class="title" name="title">{{mod.title}}</a>
         <p id="author">{{mod.author}}</p>
         <p id="date">{{mod.date}}</p>
         <p id="description">{{mod.description}}</p>

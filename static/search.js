@@ -54,7 +54,6 @@ function jsonFormat(json){
 
 async function makeModObject(json){
 
-
         //Experimenting with Handlebars.
         let hbTemplate = document.getElementById('htmlTemplate').innerHTML
         let compiledHTML = Handlebars.compile(hbTemplate)
@@ -78,17 +77,30 @@ function hideButtons(){
 }
 }
 
-function clickEventListener(e){
+async function clickEventListener(e){
     e.preventDefault()
+    let result
     if(e.target.classList.contains('pullMod')){
-        pullMod(e.target.parentElement,e.target)
+        result = await pullMod(e.target.parentElement,e.target)
+        if(result.status == "Success"){
+            console.log("Success!");
+            e.target.innerText = "Pulled!";
+        }
+        else if(result.status == "Already pulled."){
+            e.target.innerText = "Already pulled.";
+        }
+    
+        e.target.disabled = true
+        e.target.classList.toggle('buttonPressed')
     }
     else if(e.target.classList.contains('addMod')){
-        addMod(e.target.parentElement)
+        result = await addMod(e.target.parentElement)
     }
+    console.log(result)
+
 }
 
-async function pullMod(modForm,button){
+async function pullMod(modForm){
     json = await jsonBuilder(modForm)
     console.log(json)
 
@@ -96,11 +108,9 @@ async function pullMod(modForm,button){
 
     console.log(response.data.status)
 
-    if(response.data.status == "Success"){
-        button.innerText = "Pulled!"
-        button.disabled = true
-    }
-    button.classList.toggle('buttonPressed')
+    return response.data
+
+
     // -When button is clicked, make a call to the server to add all the mod info in.
     // -Organize mod object so you can properly pass the info in.
     // -Send Flask request with mod json data.
@@ -110,10 +120,13 @@ async function pullMod(modForm,button){
 
 async function addMod(modForm){
     console.log(modForm)
-//     -When button is clicked, check if mod is in records.  If not, add it.
-//     -Return mod ID regardless.
-//  -Make a call to the server to make a mod_record page.  Use aforementioned mod id.
-
+//     -When button is clicked, check if mod is added to database.  If not, add it.
+    result = await pullMod(modForm)
+    console.log(result)
+//          -Return mod ID regardless.
+//     -Make a call to the server to make a mod_record page.  Use aforementioned mod id.
+    response = await axios.post(`/api/add_record/${result.mod_id}`)
+    console.log(response)
 }
 
 function jsonBuilder(obj){

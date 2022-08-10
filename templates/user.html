@@ -14,7 +14,7 @@
     <div id="userRecords">
         <h2>User's Mods</h2>
         {% for record in user.records %}
-            <p>Title: {{record.mod.title}}</p>
+            <p>Title: <a href="{{url_for('get_record', record_id=record.id)}}">{{record.mod.title}}</a></p>
         {% endfor %}
     </div>
     <h2>Comments: </h2>
