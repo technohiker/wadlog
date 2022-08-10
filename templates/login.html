@@ -20,22 +20,8 @@
     <button id="addButton">Submit</button>
 </form>
 
-<!--
-
-<script>
-    formLogin.addEventListener('submit',e =>{
-        e.preventDefault()
-        console.log(e.target)
-        testResponse(e.target)
-    })
-
-    async function testResponse(loginForm){
-        form = new FormData(loginForm)
-        console.log(form)
-        response = await axios.post('/login', form)
-    }
-</script>
-
--->
+<form action="{{ url_for('front_page')}}", method="GET">
+    <button>Back</button>
+</form>
 
 {% endblock %}

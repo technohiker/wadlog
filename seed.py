@@ -12,8 +12,7 @@ db.create_all()
 u1 = {
     "username": "okay_doomer",
     "email": "test@email.com",
-    "password": "HASHED_PASSWORD_1",
-    "image_url": ""
+    "password": "HASHED_PASSWORD_1"
 }
 
 u2 = {

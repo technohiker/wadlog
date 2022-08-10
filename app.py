@@ -113,7 +113,7 @@ def register():
                 username= form.username.data,
                 email = form.email.data,
                 password=form.password.data,
-                image_url=form.image_url.data
+                image_url=form.image_url.data or Users.image_url.default.arg
             )
             db.session.commit()
 

@@ -18,6 +18,10 @@
     </p>
     {% endfor %}
     <button id="addButton">Submit</button>
+    
+</form>
+<form action="{{ url_for('front_page')}}", method="GET">
+    <button>Back</button>
 </form>
 
 {% endblock %}

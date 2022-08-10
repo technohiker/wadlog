@@ -45,7 +45,8 @@ class Users(db.Model):
 
     image_url = db.Column(
         db.Text,
-        default='/static/images/default_profile.png')
+        default='/static/images/default_profile.png',
+        nullable=False)
 
     #records = db.relationship('records')
 
@@ -60,15 +61,13 @@ class Users(db.Model):
 
     #Register user.
     @classmethod
-    def signup(cls, username, password, email, image_url):
+    def signup(cls, username, password, email, image_url='/static/images/default_profile.png'):
         """Sign up user.
 
         Hashes password and adds user to system.
         """
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-
-
 
         user = Users(
             username=username,
