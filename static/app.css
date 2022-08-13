@@ -1,3 +1,36 @@
 .pressed-button{
     background: #555555;
 }
+.searchForm{
+    border: 1%;
+    border-style: solid; 
+    border-width: 100px solid;
+    border-color: red;
+    display: inline-block;
+}
+.hiddenValue{
+    display: none;
+}
+
+.searchedMod{
+    display: inline-block;
+    width: 80%;
+}
+
+.userAvatar{
+    height: 100px;
+    width: 100px;
+}
+
+.userContainer{
+    display: inline-block;
+    margin: 10px;
+    border: 1%;
+    border-style: solid; 
+    border-width: 100px solid;
+    border-color: red;
+}
+
+.userContainerInfo{
+    float: right;
+}

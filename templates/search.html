@@ -3,9 +3,9 @@
 {% block content %}
 
 
-<h1 class="display-1">Pull mods.</h1>
+<h2 class="display-5">Pull mods</h2>
 
-    <form name="formSearch" id="formSearch" method="POST">
+    <form class="searchForm" name="formSearch" id="formSearch" method="POST">
 
     {{ form.hidden_tag() }}
 
@@ -22,20 +22,20 @@
     {% raw %} <!--Tells Jinja to ignore this code.-->
     <script id="htmlTemplate" type="text/x-handlebars-template">
         {{#each file}}
-        <form name="formMod" id="formMod-{{id}}" method="POST">
-            <p id="id">{{id}}</p>
-            <p id="url">{{url}}</p>
-            <p id="dir">{{dir}}</p>
-            <a href="{{url}}" id="title" class="title" name="title">{{title}}</a>
-            <p id="author">{{author}}</p>
-            <p id="date">{{date}}</p>
+        <form name="formMod" id="formMod-{{id}}" class="searchedMod" method="POST">
+            <p class="hiddenValue" id="id">{{id}}</p>
+            <p class="hiddenValue" id="url">{{url}}</p>
+            <p class="hiddenValue" id="dir">{{dir}}</p>
+            <h2><a href="{{url}}" id="title" class="title" name="title">{{title}}</a></h2>
+            <p id="author">Author: {{author}}</p>
+            <p id="date">Release Date: {{date}}</p>
             <p id="description">{{description}}</p>
             {{#if votes}}
-                <p id="rating">{{rating}}</p>
-                <p id="votes">{{votes}}</p>
+                <p id="rating">{{rating}} of 5</p>
+                <p id="votes">{{votes}} ratings</p>
             {{/if}}
             <button class= "modButton pullMod">Pull Mod</button>
-            <button class="modButton addMod">Add Mod</button>
+            <button class= "modButton addMod">Add Mod</button>
         </form>
         {{else}}
             <p>No file found.  Please check if you typed your search in correctly.</p>

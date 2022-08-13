@@ -69,7 +69,7 @@ function hideButtons(){
     buttons = document.querySelectorAll('.modButton')
     for(i = 0; i < buttons.length; i++){
         if(!document.cookie.includes('user')){
-            buttons[i].style.visibility = 'hidden'
+            buttons[i].style.display = 'none'
         }
         else{
             buttons[i].addEventListener('click',clickEventListener)

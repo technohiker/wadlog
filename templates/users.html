@@ -1,0 +1,13 @@
+{% from 'macros.html' import create_user_object with context %}
+{% extends 'base.html' %}
+
+{% block content %}
+<h2><u>Users:</u></h2>
+<div class="userContainers">
+    {% for user in users %}
+        {{ create_user_object(user) }}
+    {% endfor %}
+</div>
+
+
+{% endblock %}

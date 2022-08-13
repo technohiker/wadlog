@@ -9,7 +9,7 @@ import json
 
 from flask import Flask, make_response, render_template, request, flash, redirect, jsonify, session, g
 from models import Records, connect_db, Mods, Users, Logs, db, Comments
-from forms import GetModsForm, RegistrationForm, LoginForm, RecordForm
+from forms import GetModsForm, RegistrationForm, LoginForm, RecordForm, UserEditForm
 
 CURR_USER_KEY = 'current_user'
 
@@ -163,7 +163,7 @@ def login():
 
     return render_template('login.html', form=form)
 
-@app.route('/logout',methods=['POST'])
+@app.route('/logout')
 def logout():
     """Log out user on Flask side, then return JSON to clear out LocalStorage."""
 
@@ -300,6 +300,11 @@ def add_record(mod_id):
 #########################################################
 # Users
 
+@app.route('/users',methods=['GET'])
+def user_list():
+    users = Users.query.all()
+    return render_template('users.html',users=users)
+
 @app.route('/users/<int:user_id>',methods=['GET'])
 def get_user(user_id):
     user = Users.query.get_or_404(user_id)
@@ -308,8 +313,19 @@ def get_user(user_id):
 
 @app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
 def edit_user(user_id):
-    user = Users.query.get_or_404(user_id).first()
-    return render_template('user_edit.html',user=user)
+    user = Users.query.get_or_404(user_id)
+    form = UserEditForm(obj=user)
+    
+    if form.validate_on_submit():
+        user.email = form.email.data,
+        user.image_url = form.image_url.data or Users.image_url.default.args
+
+        db.session.add(user)
+        db.session.commit()
+    
+        return redirect(f'/users/{user_id}')
+
+    return render_template('user_edit.html',user=user, form=form)
 
 #########################################################
 # Comments
