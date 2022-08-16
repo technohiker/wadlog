@@ -1,41 +1,20 @@
     {% macro create_mod_object(mod) %}
-        <p>vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv</p>
-        <p id="url">{{mod.url}}</p>
-        <p id="category">{{mod.category}}</p>
-        <a href="{{ url_for('get_mod', mod_id = mod.id) }}" id="title" class="title" name="title">{{mod.title}}</a>
-        <p id="author">{{mod.author}}</p>
-        <p id="date">{{mod.date}}</p>
-        <p id="description">{{mod.description}}</p>
-        {% if mod.rating > 0 %}
-            <p id="rating">{{mod.rating}}</p>
-            <p id="votes">{{mod.votes}}</p>
-        {% endif %}
-        <p>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
     {% endmacro %}
 
-    {% macro create_record_object(record) %}
-        <p>
-            <a href="{{ url_for('get_record', record_id = record.id) }}">
-                {{record.user.username}}: {{record.mod.title}}
-            </a>            
-        </p>
+    {% macro create_record_card(record) %}
+        <div class="card border-primary mt-3" style="width:max-content">
+            <div class="card-header">
+                <a href="{{ url_for('get_user', user_id = record.user.id) }}">
+                    User: {{record.user.username}}
+                </a>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('get_record', record_id = record.id) }}">
+                    Record: {{record.mod.title}}
+                </a>
+            </div>
+        </div>
     {% endmacro %}
 
     {% macro create_user_object(user, count) %}
-        <div class="userContainer">
-            <a href="{{ url_for('get_user', user_id = user.id) }}">
-                <img class="userAvatar" src="{{user.image_url}}">
-            </a>
-            <ul class="userContainerInfo">
-                <li>
-                    <a href="{{ url_for('get_user', user_id = user.id) }}">
-                        User: {{user.username}}
-                    </a>
-                </li>
-                <li>
-                    <span>Records: {{user.records | length}}</span>
-                </li>
-            </ul>
-        </div>
-        <br>
     {% endmacro %}

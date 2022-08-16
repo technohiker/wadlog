@@ -5,25 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="/static/app.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark">
-        <div class="navbar-left">
-            <a class="nav-item px-3" href="{{ url_for('mod_list')}}">Mods</a>
-            <a class="nav-item px-3" href="{{ url_for('front_page')}}">Search</a>
-        </div>
+        <ul class="navbar-nav">
+            <li>
+                <a class="nav-link px-3" href="{{ url_for('mod_list')}}">Mods</a>
+            </li>
+            <li>
+                <a class="nav-link px-3" href="{{ url_for('user_list')}}">Users</a>
+            </li>
+            <li>
+                <a class="nav-link px-3" href="{{ url_for('front_page')}}">Search</a>
+            </li>
+        </ul>
         {% if g.user %}
-        <div class="navbar-right">
-            <a class="nav-item px-5" href="{{ url_for('get_user',user_id=g.user.id)}}">User Profile</a>
-            <a class="nav-item px-3" href="{{ url_for('logout')}}">Logout</a>
-        </div>
+        <ul class="navbar-nav">
+            <li>
+                <a class="nav-link nav-item px-3" href="{{ url_for('get_user',user_id=g.user.id)}}">User Profile</a>
+            </li>
+            <li>
+                <a class="nav-link nav-item px-3" href="{{ url_for('logout')}}">Logout</a>
+            </li>
+        </ul>
         {% else %}
-        <div class="navbar-right">
-            <a class="nav-item px-5" href="{{ url_for('register')}}">Register</a>
-            <a class="nav-item px-3" href="{{ url_for('login')}}">Login</a>
-        </div>
+        <ul class="navbar-nav">
+            <li>
+                <a class="nav-link nav-item px-3" href="{{ url_for('register')}}">Register</a>
+            </li>
+            <li>
+                <a class="nav-link nav-item px-3" href="{{ url_for('login')}}">Login</a>
+            </li>
+            </ul>
         {% endif %}
     </nav>
     {% for msg in get_flashed_messages() %}

@@ -15,6 +15,10 @@
 .searchedMod{
     display: inline-block;
     width: 80%;
+    border-style: solid; 
+    border-width: 100px solid;
+    border-color: red;
+    margin-top: 10px;
 }
 
 .userAvatar{
@@ -22,15 +26,42 @@
     width: 100px;
 }
 
+.userContainerInfo{
+    display: flex;
+    flex-direction: column;
+}
+
 .userContainer{
-    display: inline-block;
     margin: 10px;
     border: 1%;
     border-style: solid; 
     border-width: 100px solid;
     border-color: red;
+    width: max-content;
+    display: flex;
+    flex-direction: row;
 }
 
-.userContainerInfo{
-    float: right;
+.flexContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.flexRow{
+    display: flex;
+    flex-direction: row;
+    flex: 200px;
+}
+
+.flexWrap{
+    flex-wrap: wrap;
+    flex: 200px;
+}
+
+.navbar-nav{
+    flex-direction: row;
+}
+
+.idImage{
+    width: 35px;
 }

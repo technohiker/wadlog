@@ -2,9 +2,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<h2><u>Mods:</u></h2>
+    <ul class="flexContainer">
     {% for mod in mods %}
-        {{ create_mod_object(mod) }}
+        <li class="userContainer">
+            <h3>
+                <a href="{{ url_for('get_mod', mod_id = mod.id) }}" id="title" class="title" name="title">{{mod.title}}</a>
+            </h3>
+            <!--
+            <p id="url">{{mod.url}}</p>
+            <p id="category">{{mod.category}}</p>
+            <p id="author">{{mod.author}}</p>
+            <p id="date">{{mod.date}}</p>
+            <p id="description">{{mod.description}}</p>
+            {% if mod.rating > 0 %}
+                <p id="rating">{{mod.rating}}</p>
+                <p id="votes">{{mod.votes}}</p>
+            {% endif %}
+            -->
+        </li>
     {% endfor %}
+    </ul>
 
 {% endblock %}

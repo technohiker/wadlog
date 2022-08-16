@@ -3,9 +3,23 @@
 
 {% block content %}
 <h2><u>Users:</u></h2>
-<div class="userContainers">
+<div class="flexContainer">
     {% for user in users %}
-        {{ create_user_object(user) }}
+    <div class="userContainer">
+        <a href="{{ url_for('get_user', user_id = user.id) }}">
+            <img class="userAvatar" src="{{user.image_url}}">
+        </a>
+        <ul class="userContainerInfo">
+            <li>
+                <a href="{{ url_for('get_user', user_id = user.id) }}">
+                    User: {{user.username}}
+                </a>
+            </li>
+            <li>
+                <span>Records: {{user.records | length}}</span>
+            </li>
+        </ul>
+    </div>
     {% endfor %}
 </div>
 
