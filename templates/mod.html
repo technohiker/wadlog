@@ -17,50 +17,44 @@
 
     </div>
 -->
-    <div class="card"  style="width:70%">
+    <div class="card"  style="width:65%">
         <div class="card-header">
             <span card="card-title">
-                <h2>{{mod.title}}
-                    <a href="{{mod.url}}">
-                        <img class="idImage" src="/static/images/idgamesFavicon.png">
-                    </a>
+                <h2><a href="{{mod.url}}">
+                    <img class="idImage" src="/static/images/idgamesFavicon.png">
+                </a>
+                <u>{{mod.title}}</u>
                 </h2>
             </span>
         </div>
         <div class="card-body d-flex flex-row flexWrap">
-            <p class="flexContainer d-flex flex-wrap">
+            <p class="flexContainer d-flex flex-wrap col-sm-3">
                 <span class="card-text">Author: {{mod.author}}</span>
                 <span class="card-text">Category: {{mod.category}}</span>
                 <span class="card-text">Date Uploaded: {{mod.date_uploaded}}</span>
                 <span class="card-text">Date Updated: {{mod.date_updated}}</span>
-                <span class="card-text">Rating: {{mod.rating * 20}}%({{mod.rating_count}} votes)</span>
+                <span class="card-text">Rating: {{ 20*mod.rating|round|int }}%({{mod.rating_count}} votes)</span>
             </p>
-            <article>{{mod.description}}</article>
+            <div class="col-sm-9">
+                <h3>Description:</h3>
+                <article class=>{{mod.description}}</article>
+            </div>
         </div>
+        <div class="d-flex flex-row">
         {% if g.user %}
-        <p><form action="{{ url_for('get_mod', mod_id = mod.id) }}" method="POST">
+        <form action="{{ url_for('get_mod', mod_id = mod.id) }}" method="POST" style="margin-bottom:15px;">
             <button id="addModButton">Add to Records</button>
-        </form></p>
+        </form>
+        <form action="{{ url_for('delete_mod', mod_id = mod.id) }}" method="POST" style="margin-bottom:15px;">
+            <button id="addModButton">Delete Mod</button>
+        </form>
         {% endif %}
+        </div>
     </div>
     <p>
         <h2>Records:</h2>
         {% for record in mod.records %}
             {{ create_record_card(record) }}
-            <!--
-                <div class="card border-primary mt-3" style="width:max-content">
-                    <div class="card-header">
-                        <a href="{{ url_for('get_user', user_id = record.user.id) }}">
-                            User: {{record.user.username}}
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <a href="{{ url_for('get_record', record_id = record.id) }}">
-                            Record:
-                        </a>
-                    </div>
-                </div>
-            -->
         {% endfor %}
     </p>
 

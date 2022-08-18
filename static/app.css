@@ -2,9 +2,10 @@
     background: #555555;
 }
 .searchForm{
-    border: 1%;
-    border-style: solid; 
-    border-width: 100px solid;
+    border: 1px;
+    border-style: solid;
+    box-shadow: 3px 4px 3px black;
+    border-width: 100px groove;
     border-color: red;
     display: inline-block;
 }
@@ -14,7 +15,7 @@
 
 .searchedMod{
     display: inline-block;
-    width: 80%;
+    width: 65%;
     border-style: solid; 
     border-width: 100px solid;
     border-color: red;
@@ -24,6 +25,16 @@
 .userAvatar{
     height: 100px;
     width: 100px;
+}
+
+.commentAvatar{
+    height: 50px;
+    width: 50px;
+}
+
+.userAvatarBig{
+    height: 150px;
+    width: 150px;
 }
 
 .userContainerInfo{
@@ -64,4 +75,12 @@
 
 .idImage{
     width: 35px;
+}
+    .idImage:hover{
+        opacity: 0.7;
+    }
+
+.recordCard{
+    text-decoration: none; 
+    color: black;
 }

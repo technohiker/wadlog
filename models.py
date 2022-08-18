@@ -311,5 +311,6 @@ class Comments(db.Model):
             'target_user': self.target_user,
             'receiver': self.receiver.username,
             'time': self.time,
-            'text': self.text
+            'text': self.text,
+            'pfp': self.sender.image_url
         }

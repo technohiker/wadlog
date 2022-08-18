@@ -242,7 +242,8 @@ def delete_mod(mod_id):
     if(g.user):
         Mods.query.filter_by(id=mod_id).delete()
         flash('Mod successfully removed.')
-    return redirect(f'/mods/{mod_id}')
+        db.session.commit()
+    return redirect(f'/mods')
 
 @app.route('/records',methods=['GET'])
 def record_list():

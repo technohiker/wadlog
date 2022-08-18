@@ -5,11 +5,11 @@
 <h2><u>Users:</u></h2>
 <div class="flexContainer">
     {% for user in users %}
-    <div class="userContainer">
-        <a href="{{ url_for('get_user', user_id = user.id) }}">
-            <img class="userAvatar" src="{{user.image_url}}">
+    <div class="card flex-row mt-3" style="width: max-content;">
+        <a href="{{ url_for('get_user', user_id = user.id) }}">    
+            <img class="userAvatar col-sm-4" src="{{user.image_url}}">
         </a>
-        <ul class="userContainerInfo">
+        <ul class="col-sm-8" style="margin-right: 20px;">
             <li>
                 <a href="{{ url_for('get_user', user_id = user.id) }}">
                     User: {{user.username}}

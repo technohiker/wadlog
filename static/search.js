@@ -130,11 +130,11 @@ async function addMod(modForm){
 }
 
 function jsonBuilder(obj){
+    let values = obj.querySelectorAll('.valuePull')
     let json = {};
-    for(i = 0; i < obj.children.length; i++){
-        child = obj.children[i]
-        if(!child.classList.contains('modButton'))
-        json[child.id] = child.innerHTML
+    for(i = 0; i < values.length; i++){
+        child = values[i]
+        json[child.getAttribute('json')] = child.getAttribute('val')
     }
     return json
 }
