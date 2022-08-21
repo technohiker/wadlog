@@ -81,6 +81,9 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
+@app.route('/')
+def redirect():
+    return redirect('/search')
 
 @app.route('/search',methods=['GET','POST'])
 def front_page():
