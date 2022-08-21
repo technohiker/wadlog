@@ -82,7 +82,7 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 @app.route('/')
-def redirect():
+def re_route():
     return redirect('/search')
 
 @app.route('/search',methods=['GET','POST'])
