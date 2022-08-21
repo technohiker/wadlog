@@ -198,7 +198,7 @@ c1 = {
 c2 = {
     "user_id": 2,
     "target_user": 1,
-    "text": "Unfortunately I don't like this one.  It often confuses tedium for difficulty."
+    "text": "Unfortunately I didn't like Hell Revealed.  It often confuses tedium for difficulty."
 }
 c3 = {
     "user_id": 1,

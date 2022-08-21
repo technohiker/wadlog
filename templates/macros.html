@@ -13,8 +13,7 @@
         <div class="card border-primary mt-3 max-content">
             <a href="{{ url_for('get_record', record_id = record.id) }}" class="recordCard">
                 <div class="card-header">
-                    <h5 class="card-title">User: {{record.user.username}}</h5>
-                    <h6 class="card-subtitle">Mod: {{record.mod.title}}</h6>
+                    <h5 class="card-subtitle">Record: {{record.mod.title}}</h5>
                 </div>
             </a>
         </div>

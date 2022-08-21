@@ -82,11 +82,11 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 @app.route('/')
-def re_route():
+def front_page():
     return redirect('/search')
 
 @app.route('/search',methods=['GET','POST'])
-def front_page():
+def search_page():
     
     form = GetModsForm()
     if (request.method == 'POST'):
@@ -253,7 +253,9 @@ def delete_mod(mod_id):
 @app.route('/records',methods=['GET'])
 def record_list():
     records = Records.query.all()
-    return render_template('records.html',records=records)
+    all_users = Users.query.all()
+    users = [u for u in all_users if u.records != []]
+    return render_template('records.html',records=records, users=users)
 
 @app.route('/records/<int:record_id>',methods=['GET'])
 def get_record(record_id):
