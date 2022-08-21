@@ -76,7 +76,7 @@ um1 = {
     "date_added": "2022-01-03",
     "user_review": '',
     "user_notes": '',
-    "play_status": '',
+    "play_status": 'Unplayed',
     "now_playing": False
 }
 
@@ -86,7 +86,7 @@ um2 = {
     "date_added": "2022-01-03",
     "user_review": '',
     "user_notes": '',
-    "play_status": '',
+    "play_status": 'Beaten',
     "now_playing": False
 }
 um3 = {
@@ -95,8 +95,8 @@ um3 = {
     "date_added": "2022-01-03",
     "user_review": '',
     "user_notes": '',
-    "play_status": '',
-    "now_playing": False
+    "play_status": 'Unplayed',
+    "now_playing": True
 }
 um4 = {
     "user_id": 2,
@@ -104,7 +104,7 @@ um4 = {
     "date_added": "2022-01-03",
     "user_review": '',
     "user_notes": '',
-    "play_status": '',
+    "play_status": 'Played',
     "now_playing": False
 }
 

@@ -3,14 +3,7 @@
 {% from 'macros.html' import create_comment_card with context %}
 
 {% block content %}
-<!--
-    <div id="userInfo" userid="{{user.id}}">
-        <p id="userName">Name: {{user.username}}</p>
-        <p id="dateJoined">Date Joined: {{user.date_joined}}</p>
-        <p><img src={{user.image_url}}></p>
-    </div>
--->
-    <div class="card" userid="{{user.id}}" style="width:max-content">
+    <div class="card max-content" userid="{{user.id}}">
         <div class="card-body d-flex flex-row">
             <img class="userAvatarBig col-sm-4" src={{user.image_url}}>
             <ul class="col-sm-8">
@@ -18,25 +11,27 @@
                 <li>Date Joined: {{user.date_joined}}</li>
             </ul>
         </div>
-        {% if g.user %}
+        {% if g.user.id == user.id %}
             <form action="{{ url_for('edit_user', user_id = user.id) }}" method="GET">
-                <button id="editUserButton" class="btn btn-primary" style="margin-bottom:10px;">Edit Profile</button>
+                <button id="editUserButton" class="btn btn-primary" style="margin-bottom:15px;">Edit Profile</button>
             </form>
         {% endif %}
     </div>
 
-    <div id="userRecords">
-        <h2>User's Mods</h2>
-        {% for record in user.records %}
-            {{ create_record_card(record)}}
-        {% endfor %}
-    </div>
-    <h2>Comments: </h2>
-    <div id="userComments">
-        {% for comment in comments %}
-            {{ create_comment_card(comment) }}
-        {% endfor %}
-    </div>
+    <p>
+        <div id="userRecords">
+            <h2>User's Mods</h2>
+            {% for record in user.records %}
+                {{ create_record_card(record)}}
+            {% endfor %}
+        </div>
+    </p>
+        <h2>Comments: </h2>
+        <div id="userComments">
+                {% for comment in comments %}
+                    {{ create_comment_card(comment) }}
+                {% endfor %}
+        </div>
     {% if g.user %}
         <h3>Write Comment:</h3>
         <form id="commentForm" method="POST">
@@ -49,11 +44,12 @@
     <script src="/static/user.js"></script>
     {% raw %}
     <script id="commentTemplate" type="text/x-handlebars-template">
-            <p>{{sender}}: {{text}} {{time}}</p>
             <div class="card" style="width:40%">
                 <div class="card-header flex-row">
-                    <img class="commentAvatar col-sm-2" src={{pfp}}>
-                    <span class="col-sm-10">{{sender}}</span>
+                <a href="/users/{{user_id}}" class="col-sm-2">
+                    <img class="commentAvatar" src="{{pfp}}">
+                </a>
+                <article class="col-sm-12">User: {{comment.sender.username}}</article>
                 </div>
                 <div class="card-body">
                     <p class="col-sm-10 card-text">{{text}}</p>
@@ -63,4 +59,8 @@
     </script>
     {% endraw %}
 
+    <p><form action="{{ url_for('user_list')}}" style="margin-bottom:15px;" method="GET">
+        <button>Return to Users</button>
+    </form>
+    </p>
 {% endblock %}

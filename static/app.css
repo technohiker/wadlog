@@ -1,6 +1,11 @@
-.pressed-button{
-    background: #555555;
+.no-bullets{
+    list-style-type: none;
+    padding-left: 0rem;
 }
+.max-content{
+    width:max-content;
+}
+
 .searchForm{
     border: 1px;
     border-style: solid;
@@ -9,6 +14,7 @@
     border-color: red;
     display: inline-block;
 }
+
 .hiddenValue{
     display: none;
 }
@@ -16,8 +22,6 @@
 .searchedMod{
     display: inline-block;
     width: 65%;
-    border-style: solid; 
-    border-width: 100px solid;
     border-color: red;
     margin-top: 10px;
 }
@@ -26,47 +30,21 @@
     height: 100px;
     width: 100px;
 }
+    .userAvatar:hover{
+        opacity: 0.7;
+    }
 
 .commentAvatar{
     height: 50px;
     width: 50px;
 }
+    .commentAvatar:hover{
+        opacity: 0.7;
+    }
 
 .userAvatarBig{
     height: 150px;
     width: 150px;
-}
-
-.userContainerInfo{
-    display: flex;
-    flex-direction: column;
-}
-
-.userContainer{
-    margin: 10px;
-    border: 1%;
-    border-style: solid; 
-    border-width: 100px solid;
-    border-color: red;
-    width: max-content;
-    display: flex;
-    flex-direction: row;
-}
-
-.flexContainer{
-    display: flex;
-    flex-direction: column;
-}
-
-.flexRow{
-    display: flex;
-    flex-direction: row;
-    flex: 200px;
-}
-
-.flexWrap{
-    flex-wrap: wrap;
-    flex: 200px;
 }
 
 .navbar-nav{
@@ -84,3 +62,6 @@
     text-decoration: none; 
     color: black;
 }
+    .recordCard:hover{
+        opacity: 0.7;
+    }

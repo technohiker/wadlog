@@ -1,6 +1,7 @@
-//if(!document.querySelector('#commentForm')){
- //   return //User is not logged in, so this code doesn't need to run.
-//}
+if(document.querySelector('#commentForm') == null){
+    throw 'User not logged in, so comment submission form will not load.'
+}
+
 const userComments = document.querySelector('#userComments')
 const commentForm = document.querySelector('#commentForm')
 const commentText = document.querySelector('#commentText')
@@ -33,4 +34,6 @@ function htmlBuilder(comment){
     newComment.innerHTML = generatedHTML
 
     userComments.appendChild(newComment)
+
+    commentText.value = ''
 }

@@ -2,21 +2,6 @@
 {% from 'macros.html' import create_record_card with context %}
 
 {% block content %}
-<!--
-    <div id="modInfo" class="searchedMod" mod_id="{{mod.id}}">
-        <p id="dir">{{mod.category}}</p>
-        <h2>
-            {{mod.title}}
-        </h2>
-        <a href="{{ url_for('get_mod', mod_id = mod.id) }}" id="title">Idgames Source</a>
-        <p id="author">Author: {{mod.author}}</p>
-        <p id="date_uploaded">Date Uploaded: {{mod.date_uploaded}}</p>
-        <p id="date_updated">Date Updated: {{mod.date_updated}}</p>
-        <p id="description">{{mod.description}}</p>
-        <p id="rating">Rating: {{mod.rating}}   Votes: {{mod.rating_count}}</p>
-
-    </div>
--->
     <div class="card"  style="width:65%">
         <div class="card-header">
             <span card="card-title">
@@ -27,14 +12,15 @@
                 </h2>
             </span>
         </div>
-        <div class="card-body d-flex flex-row flexWrap">
-            <p class="flexContainer d-flex flex-wrap col-sm-3">
-                <span class="card-text">Author: {{mod.author}}</span>
-                <span class="card-text">Category: {{mod.category}}</span>
-                <span class="card-text">Date Uploaded: {{mod.date_uploaded}}</span>
-                <span class="card-text">Date Updated: {{mod.date_updated}}</span>
-                <span class="card-text">Rating: {{ 20*mod.rating|round|int }}%({{mod.rating_count}} votes)</span>
-            </p>
+        <div class="card-body d-flex flex-row">
+
+            <ul class="d-flex flex-column no-bullets col-sm-3">
+                <li class="card-text"><b>Author:</b> {{mod.author}}</li>
+                <li class="card-text"><b>Category:</b> {{mod.category}}</li>
+                <li class="card-text"><b>Date Uploaded:</b> {{mod.date_uploaded}}</li>
+                <li class="card-text"><b>Date Pulled:</b> {{mod.date_updated}}</li>
+                <li class="card-text"><b>Rating:</b> {{ 20*mod.rating|round|int }}%({{mod.rating_count}} votes)</li>
+            </ul>
             <div class="col-sm-9">
                 <h3>Description:</h3>
                 <article class=>{{mod.description}}</article>
@@ -58,7 +44,7 @@
         {% endfor %}
     </p>
 
-    <form action="{{ url_for('mod_list')}}" style="margin-bottom:20px;" method="GET">
+    <form action="{{ url_for('mod_list')}}" style="margin-bottom:15px;" method="GET">
         <button>Return to Mods</button>
     </form>
 

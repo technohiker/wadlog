@@ -3,9 +3,9 @@
 
 {% block content %}
 <h2><u>Users:</u></h2>
-<div class="flexContainer">
+<div class="d-flex flex-column">
     {% for user in users %}
-    <div class="card flex-row mt-3" style="width: max-content;">
+    <div class="card flex-row mt-3 max-content">
         <a href="{{ url_for('get_user', user_id = user.id) }}">    
             <img class="userAvatar col-sm-4" src="{{user.image_url}}">
         </a>

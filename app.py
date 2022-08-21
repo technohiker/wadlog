@@ -8,7 +8,7 @@ import requests
 import json
 
 from flask import Flask, make_response, render_template, request, flash, redirect, jsonify, session, g
-from models import Records, connect_db, Mods, Users, Logs, db, Comments
+from models import Records, connect_db, Mods, Users, db, Comments
 from forms import GetModsForm, RegistrationForm, LoginForm, RecordForm, UserEditForm
 
 CURR_USER_KEY = 'current_user'
@@ -169,10 +169,12 @@ def logout():
 
     do_logout()
 
+    flash('You have been successfully logged out.')
+
     response = make_response()
     response.delete_cookie('user')
     response.delete_cookie('password')
-    response.location = '/search'
+    response.location = request.referrer
     response.status_code = 302
 
     return response
@@ -206,13 +208,13 @@ def add_mod():
     db.session.add(mod)
     db.session.commit()
     return jsonify({
-        "status": "Success",
+        "status": "Pulled!",
         "mod_id": mod.id
     })
 
 @app.route('/mods',methods=['GET'])
 def mod_list():
-    mods = Mods.query.all()
+    mods = Mods.query.order_by(Mods.title.asc()).all()
     return render_template('mods.html',mods=mods)
 
 @app.route('/mods/<int:mod_id>',methods=['GET','POST'])
@@ -271,7 +273,7 @@ def edit_record(record_id):
     
         return redirect(f'/records/{record_id}')
 
-    return render_template('record_edit.html',form=form,record_id=record_id)
+    return render_template('record_edit.html',form=form,record=record)
 
 @app.route('/records/<int:record_id>',methods=['POST'])
 def delete_record(record_id):
@@ -289,12 +291,14 @@ def add_record(mod_id):
         db.session.add(record)
         db.session.commit()
         return jsonify({
-            "status": "Added successfully!"
+            "status": "Added!",
+            "record_id": record.id
         })
     except IntegrityError as e:
          db.session.rollback()
          return jsonify({
-             "status": "Record already exists."
+             "status": "Already exists.",
+             "record_id": record.id
          })
     
 
@@ -303,7 +307,7 @@ def add_record(mod_id):
 
 @app.route('/users',methods=['GET'])
 def user_list():
-    users = Users.query.all()
+    users = Users.query.order_by(Users.username.asc()).all()
     return render_template('users.html',users=users)
 
 @app.route('/users/<int:user_id>',methods=['GET'])

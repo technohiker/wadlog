@@ -43,9 +43,9 @@ class RecordForm(FlaskForm):
     user_review = TextAreaField('Review')
     user_notes = StringField('Notes')
     play_status = SelectField('Play Status',choices=[
-        ['unplayed','Unplayed'],
-        ['played','Played'],
-        ['beaten','Beaten']
+        ['Unplayed','Unplayed'],
+        ['Played','Played'],
+        ['Beaten','Beaten']
     ])
     now_playing = BooleanField('Now Playing')
 

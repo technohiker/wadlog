@@ -9,13 +9,16 @@
     <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark sticky-top bg-dark">
         <ul class="navbar-nav">
             <li>
                 <a class="nav-link px-3" href="{{ url_for('mod_list')}}">Mods</a>
             </li>
             <li>
                 <a class="nav-link px-3" href="{{ url_for('user_list')}}">Users</a>
+            </li>
+            <li>
+                <a class="nav-link px-3" href="{{ url_for('record_list')}}">Records</a>
             </li>
             <li>
                 <a class="nav-link px-3" href="{{ url_for('front_page')}}">Search</a>

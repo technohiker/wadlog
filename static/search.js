@@ -59,8 +59,6 @@ async function makeModObject(json){
         let compiledHTML = Handlebars.compile(hbTemplate)
         let generatedHTML = compiledHTML(json)
 
-      //  console.log(generatedHTML)
-
         modContainer.innerHTML = generatedHTML
 }
 
@@ -79,54 +77,31 @@ function hideButtons(){
 
 async function clickEventListener(e){
     e.preventDefault()
+    let modInfo = jsonBuilder(e.target.parentElement)
     let result
     if(e.target.classList.contains('pullMod')){
-        result = await pullMod(e.target.parentElement,e.target)
-        if(result.status == "Success"){
-            console.log("Success!");
-            e.target.innerText = "Pulled!";
-        }
-        else if(result.status == "Already pulled."){
-            e.target.innerText = "Already pulled.";
-        }
-    
-        e.target.disabled = true
-        e.target.classList.toggle('buttonPressed')
+        result = await pullMod(modInfo)
     }
     else if(e.target.classList.contains('addMod')){
-        result = await addMod(e.target.parentElement)
+        result = await addMod(modInfo)
     }
-    console.log(result)
-
+    e.target.innerText = result.status
+    e.target.disabled = true
 }
 
-async function pullMod(modForm){
-    json = await jsonBuilder(modForm)
-    console.log(json)
-
+async function pullMod(json){
     response = await axios.post('/api/add_mod', json)
 
-    console.log(response.data.status)
-
     return response.data
-
-
-    // -When button is clicked, make a call to the server to add all the mod info in.
-    // -Organize mod object so you can properly pass the info in.
-    // -Send Flask request with mod json data.
-    //     -Make sure 'last_updated' is adjusted, if you're updating a new mod.
-    // -Flash to show user that it was pulled.
 }
 
-async function addMod(modForm){
-    console.log(modForm)
+async function addMod(json){
 //     -When button is clicked, check if mod is added to database.  If not, add it.
-    result = await pullMod(modForm)
-    console.log(result)
-//          -Return mod ID regardless.
-//     -Make a call to the server to make a mod_record page.  Use aforementioned mod id.
+    result = await pullMod(json)
+
     response = await axios.post(`/api/add_record/${result.mod_id}`)
-    console.log(response)
+
+    return response.data
 }
 
 function jsonBuilder(obj){
@@ -138,25 +113,3 @@ function jsonBuilder(obj){
     }
     return json
 }
-
-/*
-
-For both buttons, only add if user is logged in.
-//Pull Mod Button:
-
-                
-                */
-
-/*
-//Add Mod Button:
-
- */
-
-/* Mod call workflow:
-
-- Make Axios call to get JSON from Idgames.
-- Add this particular mod file to mod container below search.
-- Need a function to convert the JSON into a mod object.
-    - Should mod object contain all mod info, or just info to make another API call?
-
-*/
