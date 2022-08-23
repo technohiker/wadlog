@@ -2,12 +2,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-fluid">
 <h2><u>Mods:</u></h2>
     <ul class="d-flex flex-column">
         {% for mod in mods %}
             {{ create_mod_card(mod) }}
         {% endfor %}
     </ul>
-</div>
 {% endblock %}

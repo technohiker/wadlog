@@ -2,7 +2,6 @@
 {% from 'macros.html' import create_record_card with context %}
 
 {% block content %}
-<div class="container-fluid">
     <div class="card"  style="width:65%">
         <div class="card-header">
             <span card="card-title">
@@ -48,7 +47,6 @@
     <form action="{{ url_for('mod_list')}}" style="margin-bottom:15px;" method="GET">
         <button>Return to Mods</button>
     </form>
-</div>
     <script src="/static/mod.js"></script>
 
 {% endblock %}

@@ -3,7 +3,6 @@
 {% from 'macros.html' import create_comment_card with context %}
 
 {% block content %}
-<div class="container-fluid">
     <div class="card max-content" userid="{{user.id}}">
         <div class="card-body d-flex flex-row">
             <img class="largeAvatar col-sm-4" src={{user.image_url}}>
@@ -64,7 +63,6 @@
         <button>Return to Users</button>
     </form>
     </p>
-</div>
     <link rel="stylesheet"
     href="https://unpkg.com/jasmine-core/lib/jasmine-core/jasmine.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine.js"></script>
