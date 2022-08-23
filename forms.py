@@ -27,7 +27,7 @@ class GetModsForm(FlaskForm):
         ['description','Description'],
         ['credits','Credits'],
         ['editors','Editors'],
-        ['whole textfile','Whole_textfile']
+        ['whole textfile','Whole Textfile']
     ])
     sort = SelectField('Sort',choices=[
         ['date','Date'],

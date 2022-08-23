@@ -9,31 +9,36 @@ const userid = document.querySelector('div[userid]').getAttribute('userid')
 
 commentForm.addEventListener('submit',e => {
     e.preventDefault()
-    console.log(e.target)
-    postComment(commentText.value)
+    createComment(e)
 })
 
+async function createComment(e){
+    comment = await postComment(commentText.value)
+    newComment = htmlBuilder(comment)
+    userComments.appendChild(newComment)
+    commentText.value = ''  //Remove user's comment after it is posted.
+}
+
+/** Send comment to database, then return data to use on client side. */
 async function postComment(text){
     data = {
         "comment": text,
         "target_user": userid
     }
     response = await axios.post('/api/comments/add',data)
-    htmlBuilder(response.data)
+    return response.data
 }
+/** Use Handlebars to generate a template so a posted comment shows up immediately. */
 function htmlBuilder(comment){
     console.log(comment)
     let hbTemplate = document.getElementById('commentTemplate').innerHTML
     let compiledHTML = Handlebars.compile(hbTemplate)
     let generatedHTML = compiledHTML(comment)
 
-    console.log(generatedHTML)
-
-    newComment = document.createElement('p')
+    let newComment = document.createElement('p')
 
     newComment.innerHTML = generatedHTML
+    console.log(newComment)
 
-    userComments.appendChild(newComment)
-
-    commentText.value = ''
+    return newComment
 }

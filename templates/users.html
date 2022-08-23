@@ -2,24 +2,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2><u>Users:</u></h2>
-<div class="d-flex flex-column">
-    {% for user in users %}
-    <div class="card flex-row mt-3 max-content">
-        <a href="{{ url_for('get_user', user_id = user.id) }}">    
-            <img class="mediumAvatar col-sm-4" src="{{user.image_url}}">
-        </a>
-        <ul class="col-sm-8" style="margin-right: 20px;">
-            <li>
-                <a href="{{ url_for('get_user', user_id = user.id) }}">
-                    User: {{user.username}}
-                </a>
-            </li>
-            <li>
-                <span>Records: {{user.records | length}}</span>
-            </li>
-        </ul>
+<div class="container-fluid">
+    <h2><u>Users:</u></h2>
+    <div class="d-flex flex-column">
+        {% for user in users %}
+        <div class="card flex-row mt-3 max-content">
+            <a href="{{ url_for('get_user', user_id = user.id) }}">    
+                <img class="mediumAvatar col-sm-4" src="{{user.image_url}}">
+            </a>
+            <ul class="col-sm-8" style="margin-right: 20px;">
+                <li>
+                    <a href="{{ url_for('get_user', user_id = user.id) }}">
+                        User: {{user.username}}
+                    </a>
+                </li>
+                <li>
+                    <span>Records: {{user.records | length}}</span>
+                </li>
+            </ul>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

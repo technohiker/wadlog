@@ -1,11 +1,14 @@
 #Copied & Pasted from Springboard's provided Seed file.
 
-from app import app
-from models import db, Users, Mods, Records, Logs, Comments
+from csv import DictReader, excel
+from app import db
+from models import Users, Mods, Records, Logs, Comments
 
 
 db.drop_all()
 db.create_all()
+
+    
 
 #Users(2)
 
@@ -70,7 +73,7 @@ db.session.add_all([Mods(**m1),Mods(**m2),Mods(**m3)])
 db.session.commit()
 
 #Records(4)
-um1 = {
+r1 = {
     "user_id": 1,
     "mod_id": 1,
     "date_added": "2022-01-03",
@@ -80,7 +83,7 @@ um1 = {
     "now_playing": False
 }
 
-um2 = {
+r2 = {
     "user_id": 1,
     "mod_id": 2,
     "date_added": "2022-01-03",
@@ -89,7 +92,7 @@ um2 = {
     "play_status": 'Beaten',
     "now_playing": False
 }
-um3 = {
+r3 = {
     "user_id": 2,
     "mod_id": 2,
     "date_added": "2022-01-03",
@@ -98,7 +101,7 @@ um3 = {
     "play_status": 'Unplayed',
     "now_playing": True
 }
-um4 = {
+r4 = {
     "user_id": 2,
     "mod_id": 3,
     "date_added": "2022-01-03",
@@ -108,7 +111,7 @@ um4 = {
     "now_playing": False
 }
 
-db.session.add_all([Records(**um1),Records(**um2),Records(**um3),Records(**um4)])
+db.session.add_all([Records(**r1),Records(**r2),Records(**r3),Records(**r4)])
 db.session.commit()
 
 #Logs(9)

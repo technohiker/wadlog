@@ -11,6 +11,9 @@ searchForm.addEventListener('submit', function(e){
     searchEvent(e)
 })
 
+/** Called upon submitting Search form.
+ *  Pulls info from Idgames API, then converts it into HTML.
+ */
 async function searchEvent(e){
     data = await showMods(e)
     modContainer.innerHTML = ''
@@ -21,6 +24,7 @@ async function searchEvent(e){
     hideButtons()
 }
 
+/** Use search form info to pull info from Idgames API. */
 async function showMods(e){
 
     let uri = 'https://www.doomworld.com/idgames/api/api.php'
@@ -40,21 +44,23 @@ async function showMods(e){
     return response.data.content
 }
 
+/** Build Idgames response into a proper JSON object.
+ *  Designed to work regardless of whether you get one or many objects.
+ */
 function jsonFormat(json){
-    //Create a list in order to work around API's structure limitations.
-        //If one object is returned, you don't get a list, messing with loops.
-        //Array is still named 'file' in order to match the Handlebar template's syntax.
-        let file = []
+    //Array is still named 'file' in order to match the Handlebar template's syntax.
+    
+    let file = []
 
-        file.push(json.file)
-        let object = { file }
+    file.push(json.file)
+    let object = { file }
 
-        return object
+    return object
 }
 
+/** Convert JSON into HTML object with Handlebars. */
 async function makeModObject(json){
 
-        //Experimenting with Handlebars.
         let hbTemplate = document.getElementById('htmlTemplate').innerHTML
         let compiledHTML = Handlebars.compile(hbTemplate)
         let generatedHTML = compiledHTML(json)
@@ -62,6 +68,7 @@ async function makeModObject(json){
         modContainer.innerHTML = generatedHTML
 }
 
+/** Hide form buttons.  Called when user is not logged in. */
 function hideButtons(){
 
     buttons = document.querySelectorAll('.modButton')

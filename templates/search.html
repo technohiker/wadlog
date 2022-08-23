@@ -2,7 +2,7 @@
 
 {% block content %}
 
-
+<div class="container-fluid">
 <h2>Pull Doom mods from Idgames archive:</h2>
     <form class="searchForm" name="formSearch" id="formSearch" method="POST">
     {{ form.hidden_tag() }}
@@ -48,6 +48,6 @@
             {{/each}}
         </script>
     {% endraw %}
-
+</div>
     <script src="/static/search.js"></script>
 {% endblock %}

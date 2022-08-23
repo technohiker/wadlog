@@ -308,7 +308,7 @@ class Comments(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'sender': self.sender.username,
-            'target_user': self.target_user,
+            'target_user_id': self.target_user,
             'receiver': self.receiver.username,
             'time': self.time,
             'text': self.text,

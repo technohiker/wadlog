@@ -1,0 +1,3 @@
+﻿username,email,password,image_url
+testuser2,test2@email.com,HASHED_PASSWORD_2,https://cdn1.epicgames.com/salesEvent/salesEvent/EGS_Quake_idSoftwareNightdiveStudios_S2_1200x1600-79b408b699f55b5ca6014447ef556226
+okay_doomer,test@email.com,HASHED_PASSWORD_1,

@@ -1,7 +1,17 @@
+import os
 from unittest import TestCase
+from dotenv import load_dotenv
 
 from app import app
 from models import db, Users, Mods, Records, Logs, Comments
+
+load_dotenv()
+
+# Now we can import app
+
+from app import app
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_TEST')
 
 
 db.drop_all()
@@ -21,8 +31,6 @@ u2 = {
     "password": "HASHED_PASSWORD_2",
     "image_url": "https://cdn1.epicgames.com/salesEvent/salesEvent/EGS_Quake_idSoftwareNightdiveStudios_S2_1200x1600-79b408b699f55b5ca6014447ef556226"
 }
-db.session.add_all([Users.signup(**u1),Users.signup(**u2)])
-db.session.commit()
 
 #Mods(3)
 
@@ -65,9 +73,6 @@ m3 = {
     "rating": 3.4352,
     "rating_count": 108
 }
-
-db.session.add_all([Mods(**m1),Mods(**m2),Mods(**m3)])
-db.session.commit()
 
 #Records(4)
 r1 = {
@@ -126,9 +131,6 @@ c3 = {
     "text": "Aw, that's fair.  It's an acquired taste."
 }
 
-db.session.add_all([Records(**r1),Records(**r2),Records(**r3),Records(**r4)])
-db.session.commit()
-
 class DoomTesting(TestCase):
     def setup(self):
         Users.query.delete()
@@ -164,13 +166,36 @@ class DoomTesting(TestCase):
         db.session.add_all([comm1,comm2,comm3])
         db.session.commit()
 
-        def tearDown(self):
-            db.session.rollback()
+    def tearDown(self):
+        db.session.rollback()
 
-        def test_front_page(self):
-         with app.test_client() as client:
-             response = client.get('/')
-             self.assertEqual(response.status_code,302)
+    def test_front_page(self):
+        with app.test_client() as client:
+            response = client.get('/')
+            self.assertEqual(response.status_code,302)
+
+    def test_search_page(self):
+        with app.test_client() as client:
+            resp_1 = client.get('/search')
+            self.assertEqual(resp_1.status_code,200)
+            self.assertIn('Pull Doom mods from Idgames archive:',str(resp_1.data))
+
+            resp_2 = client.post('/search',json={
+                "query": "Sunlust",
+                "type": "title",
+                "sort": "date",
+                'dir': 'asc'
+            })
+            self.assertIn("Dannebubinga",str(resp_2.data))
+
+            resp_3 = client.post('/search',json={
+                "query": "opdfbng",
+                "type": "title",
+                "sort": "date",
+                'dir': 'asc'
+            })
+            self.assertIn("No files returned",str(resp_3.data))
+
 
 # #Dummy test data taken from Springboard's test file.
 # CUPCAKE_DATA = {
