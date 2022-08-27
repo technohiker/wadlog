@@ -15,7 +15,10 @@ commentForm.addEventListener('submit',e => {
 async function createComment(e){
     comment = await postComment(commentText.value)
     newComment = htmlBuilder(comment)
-    userComments.appendChild(newComment)
+    if(newComment.data.status == 'Unauthorized access.'){
+        return
+    }
+    userComments.appendChild(newComment.data)
     commentText.value = ''  //Remove user's comment after it is posted.
 }
 
@@ -26,7 +29,7 @@ async function postComment(text){
         "target_user": userid
     }
     response = await axios.post('/api/comments/add',data)
-    return response.data
+    return response
 }
 /** Use Handlebars to generate a template so a posted comment shows up immediately. */
 function htmlBuilder(comment){

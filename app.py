@@ -29,28 +29,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',"This is a secret")
 
 connect_db(app)
 
-def create_mod(m_json):
-    """Returns a mod record created with JSON data."""
-
-    category = m_json['dir'].partition('/')[0]
-
-    rating = m_json['rating'] if 'rating' in m_json else 0
-
-    votes = m_json['votes'] if 'votes' in m_json else 0
-
-
-    return Mods(
-        title=m_json['title'],
-        file_id=m_json['id'],
-        url=m_json['url'],
-        description=m_json['description'],
-        date_uploaded=m_json['date'],
-        author=m_json['author'],
-        category=category,
-        rating=rating,
-        rating_count=votes
-        )
-
 @app.before_first_request
 def check_cookies():
     if('user' in request.cookies):
@@ -63,11 +41,11 @@ def check_cookies():
 @app.before_request
 def global_user():
     """Set current user to Flask's global object."""
-
     if CURR_USER_KEY in session:
         g.user = Users.query.get(session[CURR_USER_KEY])
     else:
         g.user = None
+
 
 def do_login(user):
     """Log in user."""
@@ -140,10 +118,6 @@ def login():
 
     if('user' in request.cookies):
         return redirect('/search')
-    
-    print(request)
-    print(request.data)
-    print(request.form)
 
     form = LoginForm()
 
@@ -193,12 +167,14 @@ def login_status():
 
 @app.route('/api/add_mod',methods=['POST'])
 def add_mod():
-    print(request)
-    print(request.data)
-    print(type(request.data))
+
+    if not g.user:
+        flash("Please login to add a mod.", "danger")
+        return jsonify({
+            "status": "Unauthorized access."
+        })
 
     mod_data = json.loads(request.data)
-
     mod_check = Mods.query.filter_by(file_id=mod_data['id']).first()
 
     if(mod_check):
@@ -209,6 +185,7 @@ def add_mod():
     mod = create_mod(json.loads(request.data))
     db.session.add(mod)
     db.session.commit()
+
     return jsonify({
         "status": "Pulled!",
         "mod_id": mod.id
@@ -226,7 +203,6 @@ def get_mod(mod_id):
     if(request.method == 'POST'):
         if(g.user):
             record = Records(user_id=g.user.id,mod_id=mod_id)
-            print("User Mods: ",g.user.records)
 
             try:
                 db.session.add(record)
@@ -236,11 +212,8 @@ def get_mod(mod_id):
                 flash('This mod is already in your records.')
                 db.session.rollback()
 
-
     return render_template('mod.html',mod=mod)
 
-###########################################
-# Records
 @app.route('/mods/<int:mod_id>/delete',methods=['POST'])
 def delete_mod(mod_id):
     if(g.user):
@@ -248,6 +221,31 @@ def delete_mod(mod_id):
         flash('Mod successfully removed.')
         db.session.commit()
     return redirect(f'/mods')
+
+def create_mod(m_json):
+    """Returns a mod record created with JSON data."""
+
+    category = m_json['dir'].partition('/')[0]
+
+    rating = m_json['rating'] if 'rating' in m_json else 0
+
+    votes = m_json['votes'] if 'votes' in m_json else 0
+
+
+    return Mods(
+        title=m_json['title'],
+        file_id=m_json['id'],
+        url=m_json['url'],
+        description=m_json['description'],
+        date_uploaded=m_json['date'],
+        author=m_json['author'],
+        category=category,
+        rating=rating,
+        rating_count=votes
+        )
+
+###########################################
+# Records
 
 @app.route('/records',methods=['GET'])
 def record_list():
@@ -261,11 +259,37 @@ def get_record(record_id):
     record = Records.query.get_or_404(record_id)
     return render_template('record.html',record=record)
 
+@app.route('/api/add_record/<int:mod_id>',methods=['POST'])
+def add_record(mod_id):
+    if(g.user):
+        try:
+            record = Records(user_id=g.user.id,mod_id=mod_id)
+            print(record)
+            db.session.add(record)
+            db.session.commit()
+            return jsonify({
+                "status": "Added!",
+                "record_id": record.id
+            })
+        except IntegrityError as e:
+                db.session.rollback()
+                return jsonify({
+                    "status": "Already exists.",
+                    "record_id": record.id
+                })
+                
+    return jsonify({
+        "status": "Not logged in."
+    })
+
 @app.route('/records/<int:record_id>/edit',methods=['GET','POST'])
 def edit_record(record_id):
+    if not g.user:
+        flash("Unauthorized access.","danger")
+        return redirect(f'/records/{record_id}')
+
     record = Records.query.get_or_404(record_id)
     form = RecordForm(obj=record)
-
     if form.validate_on_submit():
         record.user_notes = form.user_notes.data,
         record.user_review = form.user_review.data
@@ -274,7 +298,6 @@ def edit_record(record_id):
 
         db.session.add(record)
         db.session.commit()
-    
         return redirect(f'/records/{record_id}')
 
     return render_template('record_edit.html',form=form,record=record)
@@ -285,26 +308,10 @@ def delete_record(record_id):
     if(g.user):
         Records.query.filter_by(id=record_id).delete()
         db.session.commit()
+        flash('Record successfully deleted.')
+    else:
+        flash('Unauthorized access.')
     return redirect(f'/mods/{mod_id}')
-
-@app.route('/api/add_record/<int:mod_id>',methods=['POST'])
-def add_record(mod_id):
-    try:
-        record = Records(user_id=g.user.id,mod_id=mod_id)
-        print(record)
-        db.session.add(record)
-        db.session.commit()
-        return jsonify({
-            "status": "Added!",
-            "record_id": record.id
-        })
-    except IntegrityError as e:
-         db.session.rollback()
-         return jsonify({
-             "status": "Already exists.",
-             "record_id": record.id
-         })
-    
 
 #########################################################
 # Users
@@ -322,6 +329,15 @@ def get_user(user_id):
 
 @app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
 def edit_user(user_id):
+    if not g.user:
+        flash('Unauthorized access.',"danger")
+        return redirect(f'/users/{user_id}')
+    print("G.User :",g.user)
+    
+    if(g.user.id != user_id):
+        flash('Unauthorized access.',"danger")
+        redirect(f'/users/{user_id}')
+
     user = Users.query.get_or_404(user_id)
     form = UserEditForm(obj=user)
     
@@ -333,7 +349,6 @@ def edit_user(user_id):
         db.session.commit()
     
         return redirect(f'/users/{user_id}')
-
     return render_template('user_edit.html',user=user, form=form)
 
 #########################################################
@@ -341,13 +356,18 @@ def edit_user(user_id):
 
 @app.route('/api/comments/add',methods=['POST'])
 def add_comment():
-    data = json.loads(request.data)
-    comment = Comments(
-        user_id=g.user.id,
-        target_user=data['target_user'],
-        text=data['comment'],
-        time=datetime.utcnow())
-    db.session.add(comment)
-    db.session.commit()
-    print(data)
-    return jsonify(comment.serialize())
+    if(g.user):
+        data = json.loads(request.data)
+        comment = Comments(
+            user_id=g.user.id,
+            target_user=data['target_user'],
+            text=data['comment'],
+            time=datetime.utcnow())
+        db.session.add(comment)
+        db.session.commit()
+        print(data)
+        return jsonify(comment.serialize())
+    print(g.user)
+    return jsonify({
+        "status": "Unauthorized access."
+    })
