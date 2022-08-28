@@ -14,11 +14,11 @@ commentForm.addEventListener('submit',e => {
 
 async function createComment(e){
     comment = await postComment(commentText.value)
-    newComment = htmlBuilder(comment)
-    if(newComment.data.status == 'Unauthorized access.'){
+    if(comment.data.status == 'Unauthorized access.'){
         return
     }
-    userComments.appendChild(newComment.data)
+    newComment = htmlBuilder(comment.data)
+    userComments.appendChild(newComment)
     commentText.value = ''  //Remove user's comment after it is posted.
 }
 
@@ -26,7 +26,7 @@ async function createComment(e){
 async function postComment(text){
     data = {
         "comment": text,
-        "target_user": userid
+        "target_user_id": userid
     }
     response = await axios.post('/api/comments/add',data)
     return response

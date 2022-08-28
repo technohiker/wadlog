@@ -17,7 +17,7 @@ class Users(db.Model):
     __tablename__ = 'users'
 
     def __repr__(self):
-        return f'<User: #{self.id} #{self.username}, Mod: #{self.email}'
+        return f'<User: #{self.id}: {self.username}, {self.email}>'
 
     id = db.Column(
         db.Integer,
@@ -98,7 +98,7 @@ class Mods(db.Model):
     __tablename__ = 'mods'
 
     def __repr__(self):
-        return f'<Mod: #{self.id} Title: #{self.title}'
+        return f'<Mod: #{self.id} Title: {self.title}>'
 
     id = db.Column(
         db.Integer,
@@ -162,13 +162,14 @@ class Mods(db.Model):
             'id': self.id,
             'file_id': self.file_id,
             'url': self.url,
+            'title': self.title,
             'description': self.description,
-            'date_uploaded': self.date_uploaded,
-            'date_updated': self.date_updated,
+            'date_uploaded': datetime.strftime(self.date_uploaded,'%Y-%m-%d'),
+            'date_updated': datetime.strftime(self.date_updated,'%Y-%m-%d'),
             'author': self.author,
             'category': self.category,
             'rating': self.rating,
-            'count': self.count
+            'rating_count': self.rating_count
         }
 
 class Records(db.Model):
@@ -177,7 +178,7 @@ class Records(db.Model):
     __tablename__ = 'records'
 
     def __repr__(self):
-        return f'<record: #{self.id} User: #{self.user_id}, Mod: #{self.mod_id}'
+        return f'<Record: #{self.id} User: #{self.user_id}, Mod: #{self.mod_id}>'
 
 
     id = db.Column(
@@ -227,50 +228,63 @@ class Records(db.Model):
 
     db.UniqueConstraint(user_id,mod_id,name='record_unique')
 
-class Logs(db.Model):
+    def serialize(self):
+        """Return a JSON object of the model."""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'mod_id': self.mod_id,
+            'date_added': datetime.strftime(self.date_added,'%Y-%m-%d'),
+            'user_review': self.user_review,
+            'user_notes': self.user_notes,
+            'play_status': self.play_status,
+            'now_playing': self.now_playing
+        }
 
-    __tablename__ = 'logs'
+# class Logs(db.Model):
 
-    def __repr__(self):
-        return f'<Log: #{self.id} record: #{self.record_id}, {self.activity_type}, {self.description}'
+#     __tablename__ = 'logs'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True)
+#     def __repr__(self):
+#         return f'<Log: #{self.id} record: #{self.record_id}, {self.activity_type}, {self.description}'
+
+#     id = db.Column(
+#         db.Integer,
+#         primary_key=True,
+#         autoincrement=True)
     
-    record_id = db.Column(
-        db.Integer,
-        db.ForeignKey('records.id',ondelete='cascade')
-    )
+#     record_id = db.Column(
+#         db.Integer,
+#         db.ForeignKey('records.id',ondelete='cascade')
+#     )
     
-    date_added = db.Column(
-        db.DateTime,
-        nullable=False
-    )
+#     date_added = db.Column(
+#         db.DateTime,
+#         nullable=False
+#     )
 
-    activity_type = db.Column(
-        db.Text,
-        nullable=False #Should probably be enum.
-    )
+#     activity_type = db.Column(
+#         db.Text,
+#         nullable=False #Should probably be enum.
+#     )
 
-    description = db.Column(
-        db.Text,
-        nullable=False
-    )
+#     description = db.Column(
+#         db.Text,
+#         nullable=False
+#     )
 
-  #  user = db.relationship('Users',secondary='records', backref='logs')
-    record = db.relationship('Records',backref='logs',cascade="all, delete")
-  #  mod = db.relationship('Mods', secondary='records',backref='logs')
+#   #  user = db.relationship('Users',secondary='records', backref='logs')
+#     record = db.relationship('Records',backref='logs',cascade="all, delete")
+#   #  mod = db.relationship('Mods', secondary='records',backref='logs')
 
-  # Enabling the above relationships causes SQLAlchemy warnings about conflicting relationships.
+#   # Enabling the above relationships causes SQLAlchemy warnings about conflicting relationships.
 
 class Comments(db.Model):
 
     __tablename__ = 'comments'
 
     def __repr__(self):
-        return f'<Comment: #{self.id} User ID: #{self.user_id}, Target User: #{self.target_user}, {self.time}, {self.text}'
+        return f'<Comment: #{self.id} User ID: #{self.user_id}, Target User: #{self.target_user_id}, Time: {self.time}, Text: {self.text}>'
 
 
     id = db.Column(
@@ -283,7 +297,7 @@ class Comments(db.Model):
         db.ForeignKey('users.id',ondelete='cascade')
     )
 
-    target_user = db.Column(
+    target_user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id',ondelete='cascade')
     )
@@ -300,7 +314,7 @@ class Comments(db.Model):
     )
 
     sender = db.relationship('Users',backref='comments',foreign_keys=user_id)
-    receiver = db.relationship('Users',backref='comments2',foreign_keys=target_user)
+    receiver = db.relationship('Users',backref='comments2',foreign_keys=target_user_id)
 
     def serialize(self):
         """Return a JSON object of the model."""
@@ -308,7 +322,7 @@ class Comments(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'sender': self.sender.username,
-            'target_user_id': self.target_user,
+            'target_user_id': self.target_user_id,
             'receiver': self.receiver.username,
             'time': self.time,
             'text': self.text,

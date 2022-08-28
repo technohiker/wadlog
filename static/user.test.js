@@ -45,9 +45,13 @@ describe("Test the ability for a user to add a comment.", function() {
     });
     xit('Should post comment info to the database.',function(){
         expect(a).toEqual(10);
+        //postComment()
     });
     it('Should use comment info to properly generate HTML.',function(){
         expect(htmlBuilder(comment).innerHTML).toContain('User: ');
+        //htmlBuilder()
     })
-    xit('Test the whole flow of the event, from the user click to appending the comment.')
+    xit('Test the whole flow of the event, from the user click to appending the comment.',() =>{
+        //createComment()        
+    })
 });

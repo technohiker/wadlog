@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="card" style="width:60%;">
+    <div class="card recordCard">
         <div class="card-header d-flex flex-row">
             <h5 class="col-sm-8">
                 <a href="{{ url_for('get_mod', mod_id = record.mod.id) }}">
@@ -28,7 +28,7 @@
                 <div class="d-flex flex-column col-sm-6">
                     <h4><u>Notes:</u></h4>
                     {% if record.user_notes != '' %}
-                        <p style="height: 70%; overflow-y:scroll">
+                        <p class="scrollBox">
                             {{record.user_notes}}
                         </p>
                     {% endif %}
@@ -36,7 +36,7 @@
                 <div class="d-flex flex-column col-sm-6">
                     <h4><u>Review:</u></h4>
                     {% if record.user_review != '' %}
-                        <p style="height: 70%; overflow-y:scroll">
+                        <p class="scrollBox">
                             {{record.user_review}}
                         </p>
                     {% endif %}

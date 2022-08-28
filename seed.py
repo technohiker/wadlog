@@ -2,7 +2,7 @@
 
 from csv import DictReader, excel
 from app import db
-from models import Users, Mods, Records, Logs, Comments
+from models import Users, Mods, Records, Comments
 
 
 db.drop_all()
@@ -126,66 +126,66 @@ db.session.commit()
     #User2 started the second mod.
     #User2 deleted the second mod.
 
-ul1 = {
-    "record_id": 1,
-    "date_added": '2022-01-03',
-    "activity_type": 'Added Mod',
-    "description": 'User added Scythe 2.'
-}
+# ul1 = {
+#     "record_id": 1,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Added Mod',
+#     "description": 'User added Scythe 2.'
+# }
 
-ul2 = {
-    "record_id": 2,
-    "date_added": '2022-01-03',
-    "activity_type": 'Added Mod',
-    "description": 'User added Hell Revealed'
-}
-ul3 = {
-    "record_id": 1,
-    "date_added": '2022-01-03',
-    "activity_type": 'Started Playing',
-    "description": 'User started playing Scythe 2.'
-}
-ul4 = {
-    "record_id": 1,
-    "date_added": '2022-01-03',
-    "activity_type": 'Finished Playing',
-    "description": 'User finished playing Scythe 2.'
-}
-ul5 = {
-    "record_id": 1,
-    "date_added": '2022-01-03',
-    "activity_type": 'Review',
-    "description": 'User wrote a review for Scythe 2.'
-}
-ul6 = {
-    "record_id": 3,
-    "date_added": '2022-01-03',
-    "activity_type": 'Added Mod',
-    "description": 'User2 added Hell Revealed.'
-}
-ul7 = {
-    "record_id": 4,
-    "date_added": '2022-01-03',
-    "activity_type": 'Added Mod',
-    "description": 'User2 added ALIENS Total Conversion.'
-}
-ul8 = {
-    "record_id": 3,
-    "date_added": '2022-01-03',
-    "activity_type": 'Started Playing',
-    "description": 'User2 started playing Hell Revealed.'
-}
-ul9 = {
-    "record_id": 3,
-    "date_added": '2022-01-03',
-    "activity_type": 'Deleted Mod',
-    "description": 'User2 deleted Hell Revealed.'
-}
+# ul2 = {
+#     "record_id": 2,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Added Mod',
+#     "description": 'User added Hell Revealed'
+# }
+# ul3 = {
+#     "record_id": 1,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Started Playing',
+#     "description": 'User started playing Scythe 2.'
+# }
+# ul4 = {
+#     "record_id": 1,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Finished Playing',
+#     "description": 'User finished playing Scythe 2.'
+# }
+# ul5 = {
+#     "record_id": 1,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Review',
+#     "description": 'User wrote a review for Scythe 2.'
+# }
+# ul6 = {
+#     "record_id": 3,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Added Mod',
+#     "description": 'User2 added Hell Revealed.'
+# }
+# ul7 = {
+#     "record_id": 4,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Added Mod',
+#     "description": 'User2 added ALIENS Total Conversion.'
+# }
+# ul8 = {
+#     "record_id": 3,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Started Playing',
+#     "description": 'User2 started playing Hell Revealed.'
+# }
+# ul9 = {
+#     "record_id": 3,
+#     "date_added": '2022-01-03',
+#     "activity_type": 'Deleted Mod',
+#     "description": 'User2 deleted Hell Revealed.'
+# }
 
-db.session.add_all([Logs(**ul1),Logs(**ul2),Logs(**ul3),
-    Logs(**ul4),Logs(**ul5),Logs(**ul6),Logs(**ul7),
-    Logs(**ul8),Logs(**ul9)])
-db.session.commit()
+# db.session.add_all([Logs(**ul1),Logs(**ul2),Logs(**ul3),
+#     Logs(**ul4),Logs(**ul5),Logs(**ul6),Logs(**ul7),
+#     Logs(**ul8),Logs(**ul9)])
+# db.session.commit()
 
 #Comments(3)
     #User1 comments on User2's mod pick.
@@ -194,18 +194,18 @@ db.session.commit()
 
 c1 = {
     "user_id": 1,
-    "target_user": 2,
+    "target_user_id": 2,
     "text": "Hey, I see you're playing Hell Revealed!  How is it?"
 }
 
 c2 = {
     "user_id": 2,
-    "target_user": 1,
+    "target_user_id": 1,
     "text": "Unfortunately I didn't like Hell Revealed.  It often confuses tedium for difficulty."
 }
 c3 = {
     "user_id": 1,
-    "target_user": 2,
+    "target_user_id": 2,
     "text": "Aw, that's fair.  It's an acquired taste."
 }
 

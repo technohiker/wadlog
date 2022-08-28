@@ -5,6 +5,12 @@
 .max-content{
     width:max-content;
 }
+.usersInfo{
+    margin-right: 20px;
+}
+.scrollBox{
+    height: 70%; overflow-y:scroll;
+}
 
 .searchForm{
     border: 1px;
@@ -39,7 +45,7 @@
     height: 50px;
     width: 50px;
 }
-    .commentAvatar:hover{
+    .smallAvatar:hover{
         opacity: 0.7;
     }
 
@@ -59,18 +65,37 @@
         opacity: 0.7;
     }
 
-.recordCard{
+.smallCard{
     text-decoration: none; 
     color: black;
 }
-    .recordCard:hover{
+    .smallCard:hover{
         opacity: 0.7;
     }
-
+.recordCard{
+    width: 60%;
+}
+.modCard{
+    width: 60%;
+}
 .userText{
     padding-top: 10px;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.commentCard{
+    width:30%;
+}
+
+.commentInfo{
+    padding-left: 2%;
+}
+
+.btnPadding{
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
 }
 
 .container-fluid label{

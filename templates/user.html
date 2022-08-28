@@ -3,19 +3,22 @@
 {% from 'macros.html' import create_comment_card with context %}
 
 {% block content %}
+    <u><h2>User Profile:</h2></u>
     <div class="card max-content" userid="{{user.id}}">
-        <div class="card-body d-flex flex-row">
-            <img class="largeAvatar col-sm-4" src={{user.image_url}}>
-            <ul class="col-sm-8">
-                <li>Name: {{user.username}}</li>
-                <li>Date Joined: {{user.date_joined}}</li>
-            </ul>
-        </div>
-        {% if g.user.id == user.id %}
+        <div class="card-body d-flex flex-column">
+            <div class="d-flex flex-row">
+                <img class="largeAvatar col-sm-4" src={{user.image_url}}>
+                <ul class="col-sm-8">
+                    <li>Name: {{user.username}}</li>
+                    <li>Date Joined: {{user.date_joined}}</li>
+                </ul>
+            </div>
+            {% if g.user.id == user.id %}
             <form action="{{ url_for('edit_user', user_id = user.id) }}" method="GET">
-                <button id="editUserButton" class="btn btn-primary" style="margin-bottom:15px;">Edit Profile</button>
+                <button id="editUserButton" class="btn btn-primary btnPadding">Edit Profile</button>
             </form>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
 
     <p>
@@ -36,7 +39,7 @@
         <h3>Write Comment:</h3>
         <form id="commentForm" method="POST">
             <p><textarea id="commentText"></textarea></p>
-            <button>Send Comment</button>
+            <button class="btn btn-primary">Send Comment</button>
         </form>
     {% endif %}
     
@@ -44,7 +47,7 @@
     <script src="/static/user.js"></script>
     {% raw %}
     <script id="commentTemplate" type="text/x-handlebars-template">
-            <div class="card" style="width:40%">
+            <div class="card commentCard">
                 <div class="card-header flex-row">
                 <a href="/users/{{user_id}}" class="col-sm-2">
                     <img class="smallAvatar" src="{{pfp}}">
@@ -59,8 +62,8 @@
     </script>
     {% endraw %}
 
-    <p><form action="{{ url_for('user_list')}}" style="margin-bottom:15px;" method="GET">
-        <button>Return to Users</button>
+    <p><form action="{{ url_for('user_list')}}" method="GET">
+        <button class="btn btn-secondary btnPadding">Return to Users</button>
     </form>
     </p>
     <link rel="stylesheet"

@@ -67,20 +67,6 @@ m2 = {
     "rating_count": 399
 }
 
-
-m3 = {
-    "title": "ALIENS Total Conversion",
-    "file_id": 1038,
-    "url": "https://www.doomworld.com/idgames/themes/aliens/alientc1",
-    "description": '',
-    "date_uploaded": "1994-11-03",
-    "date_updated": "2022-01-05",
-    "author": "Justin Fisher",
-    "category": "themes",
-    "rating": 3.4352,
-    "rating_count": 108
-}
-
 rawMod = {
     "id":18168,
     "title":"Sunlust",
@@ -93,10 +79,8 @@ rawMod = {
     "url":"https://www.doomworld.com/idgames/levels/doom2/Ports/megawads/sunlust"
 }
 
-#Records(4)
+#Records(2)
 r1 = {
-    "user_id": 1,
-    "mod_id": 1,
     "date_added": "2022-01-03",
     "user_review": '',
     "user_notes": '',
@@ -104,24 +88,8 @@ r1 = {
     "now_playing": False
 }
 
-r2 = {
-    "user_id": 1,
-    "mod_id": 2,
-    "date_added": "2022-01-03",
-    "user_review": '',
-    "user_notes": '',
-    "play_status": 'Beaten',
-    "now_playing": False
-}
-
-c2 = {
-    "user_id": 2,
-    "target_user": 1,
-    "text": "Unfortunately I didn't like Hell Revealed.  It often confuses tedium for difficulty."
-}
-c3 = {
-    "user_id": 1,
-    "target_user": 2,
+#Comments(1)
+c1 = {
     "text": "Aw, that's fair.  It's an acquired taste."
 }
 
@@ -137,8 +105,13 @@ class DoomTesting(TestCase):
         Comments.query.delete()
 
         # Users:
-        self.user1 = Users.signup(**u1)
-        self.user2 = Users.signup(**u2)
+        #self.user1 = Users.signup(**u1)
+        #self.user2 = Users.signup(**u2)
+        #db.session.commit()
+
+        self.user1 = Users(**u1)
+        self.user2 = Users(**u2)
+        db.session.add_all([self.user1,self.user2])
         db.session.commit()
 
         # Mods:
@@ -147,35 +120,19 @@ class DoomTesting(TestCase):
         db.session.commit()
 
         # Records: 
-        self.record1 = Records(
+        self.record1 = Records(**r1,
             user_id = self.user1.id,
-            mod_id=self.mod1.id,
-            date_added='2022-01-03',
-            play_status='Beaten',
-            now_playing=False
+            mod_id=self.mod1.id
         )
-        self.record2 = Records(
-            user_id = self.user2.id,
-            mod_id=self.mod1.id,
-            date_added='2022-01-03',
-            play_status='Played',
-            now_playing=True
-        )
-        db.session.add_all([self.record1,self.record2])
+        db.session.add(self.record1)
         db.session.commit()
 
         # Comments:
-        self.comm1 = Comments(
+        self.comm1 = Comments(**c1,
             user_id=self.user1.id,
-            target_user=self.user2.id,
-            text="Hey, I see you're playing Hell Revealed!  How is it?"
+            target_user_id=self.user2.id,
         )
-        self.comm2 = Comments(
-            user_id=self.user2.id,
-            target_user=self.user1.id,
-            text="Unfortunately I didn't like Hell Revealed.  It often confuses tedium for difficulty."
-        )
-        db.session.add_all([self.comm1,self.comm2])
+        db.session.add(self.comm1)
         db.session.commit()
 
     def tearDown(self):
@@ -188,16 +145,17 @@ class DoomTesting(TestCase):
 
     def test_search_page(self):
         with self.client as client:
-            resp_1 = client.get('/search')
-            self.assertEqual(resp_1.status_code,200)
-            self.assertIn('Pull Doom mods from Idgames archive:',str(resp_1.data))
-
-            resp_2 = client.post('/search',json={
+            search_json = {
                 "query": "Sunlust",
                 "type": "title",
                 "sort": "date",
                 'dir': 'asc'
-            })
+            }
+            resp_1 = client.get('/search')
+            self.assertEqual(resp_1.status_code,200)
+            self.assertIn('Pull Doom mods from Idgames archive:',str(resp_1.data))
+
+            resp_2 = client.post('/search',json=search_json)
             self.assertIn("Dannebubinga",str(resp_2.data))
 
             resp_3 = client.post('/search',json={
@@ -225,14 +183,14 @@ class DoomTesting(TestCase):
     def test_login(self):
         """See if a user can login."""
         with self.client as client:
+            user3 = Users.signup(**u3)
+            db.session.commit()
+
             resp_1 = client.get('/login')
             self.assertEqual(resp_1.status_code,200)
             self.assertIn('Login',str(resp_1.data))
 
-            resp_2 = client.post('/login',json={
-                "username": "testuser1",
-                "password": "HASHED_PASSWORD_1"
-            })
+            resp_2 = client.post('/login',json=u3)
             self.assertEqual(resp_2.status_code,302)
 
             resp_3 = client.get('/api/login_status')
@@ -246,8 +204,6 @@ class DoomTesting(TestCase):
                 sess[CURR_USER_KEY] = self.user1.id
 
             resp_3 = client.get('/api/login_status')
-          #  data = json.loads(resp_3.get_data(as_text=True))
-          #  self.assertEqual("True",data['status'])
             self.assertIn("True",str(resp_3.data))
 
             resp_1 = client.get('/logout')
@@ -392,7 +348,7 @@ class DoomTesting(TestCase):
             resp_2 = client.post(f'/records/{record_id}')
             self.assertEqual(resp_2.status_code,302)
             self.assertIsNone(Records.query.get(record_id))
-    
+            
     def test_edit_record(self):
         """Get a record editing form, and submit it.
            User must be logged in."""
@@ -463,13 +419,14 @@ class DoomTesting(TestCase):
             users = Users.query.get(self.user1.id)
             self.assertEqual(users.email,user_values['email'])
             self.assertEqual(users.image_url,user_values['image_url'])
+
     #######################################
     # Comments:
     def test_add_comment(self):
         """Test adding a comment.  User must be logged in."""
         with self.client as client:
             user2_id = self.user2.id
-            resp_1 = client.post(f'/api/comments/add',json=c3)
+            resp_1 = client.post(f'/api/comments/add',json=c1)
             self.assertIn('Unauthorized',str(resp_1.data))
 
             client.set_cookie('localhost','user',self.user1.username)
@@ -477,7 +434,7 @@ class DoomTesting(TestCase):
                 sess[CURR_USER_KEY] = self.user1.id
 
             resp_2 = client.post(f'/api/comments/add',json={
-                "comment": c3["text"],
-                "target_user": user2_id
+                "comment": c1["text"],
+                "target_user_id": user2_id
             })
             self.assertIn('acquired',str(resp_2.data))

@@ -264,7 +264,6 @@ def add_record(mod_id):
     if(g.user):
         try:
             record = Records(user_id=g.user.id,mod_id=mod_id)
-            print(record)
             db.session.add(record)
             db.session.commit()
             return jsonify({
@@ -324,7 +323,7 @@ def user_list():
 @app.route('/users/<int:user_id>',methods=['GET'])
 def get_user(user_id):
     user = Users.query.get_or_404(user_id)
-    comments = Comments.query.filter_by(target_user=user_id)
+    comments = Comments.query.filter_by(target_user_id=user_id)
     return render_template('user.html',user=user,comments=comments)
 
 @app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
@@ -332,7 +331,6 @@ def edit_user(user_id):
     if not g.user:
         flash('Unauthorized access.',"danger")
         return redirect(f'/users/{user_id}')
-    print("G.User :",g.user)
     
     if(g.user.id != user_id):
         flash('Unauthorized access.',"danger")
@@ -360,14 +358,12 @@ def add_comment():
         data = json.loads(request.data)
         comment = Comments(
             user_id=g.user.id,
-            target_user=data['target_user'],
+            target_user_id=data['target_user_id'],
             text=data['comment'],
             time=datetime.utcnow())
         db.session.add(comment)
         db.session.commit()
-        print(data)
         return jsonify(comment.serialize())
-    print(g.user)
     return jsonify({
         "status": "Unauthorized access."
     })

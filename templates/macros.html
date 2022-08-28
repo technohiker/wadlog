@@ -1,6 +1,6 @@
     {% macro create_mod_card(mod) %}
     <div class="card border-primary mt-3 max-content">
-        <a href="{{ url_for('get_mod', mod_id = mod.id) }}" class="recordCard">
+        <a href="{{ url_for('get_mod', mod_id = mod.id) }}" class="smallCard">
             <div class="card-header">
                 <h5 class="card-title">Title: {{mod.title}}</h5>
                 <h6 class="card-subtitle">Date Added: {{mod.date_updated}}</h6>
@@ -11,7 +11,7 @@
 
     {% macro create_record_card(record) %}
         <div class="card border-primary mt-3 max-content">
-            <a href="{{ url_for('get_record', record_id = record.id) }}" class="recordCard">
+            <a href="{{ url_for('get_record', record_id = record.id) }}" class="smallCard">
                 <div class="card-header">
                     <h5 class="card-subtitle">Record: {{record.mod.title}}</h5>
                 </div>
@@ -24,16 +24,18 @@
 
     {% macro create_comment_card(comment) %}
     <p>
-        <div class="card" style="width:40%">
-            <div class="card-header flex-row">
-                <a href="{{ url_for('get_user', user_id = comment.sender.id) }}" class="col-sm-2">
+        <div class="card commentCard">
+            <div class="card-header d-flex flex-row">
+                <a href="{{ url_for('get_user', user_id = comment.sender.id) }}">
                     <img class="smallAvatar" src="{{comment.sender.image_url}}">
                 </a>
-                <article class="col-sm-12">User: {{comment.sender.username}}</article>
+                <div class="d-flex flex-column commentInfo">
+                    <span>User: {{comment.sender.username}}</span>
+                    <span>Sent: {{ comment.time.strftime('%a, %d %b %Y %H:%M:%S GMT') }}</span>
+                </div>
             </div>
             <div class="card-body">
-                <p class="col-sm-10 card-text">{{comment.text}}</p>
-                <span class="col-sm-2">Sent: {{comment.time}}</span>
+                <p class="card-text">{{comment.text}}</p>
             </div>
         </div>
     </p>
