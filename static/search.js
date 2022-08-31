@@ -38,9 +38,8 @@ async function searchEvent(e){
 /** Use search form info to pull info from Idgames API. 
  * Calls Flask instead of Idgames directly to get around CSRF.
 */
-async function showMods(json){
-
-    response = await axios.post('/search',json)
+async function showMods(data){
+    response = await axios.post('/search',data)
     return response.data.content
 }
 
@@ -83,7 +82,7 @@ function hideButtons(html){
 
 async function clickEventListener(e){
     e.preventDefault()
-    let modInfo = jsonBuilder(e.target.parentElement)
+    let modInfo = jsonBuilder(e.target.parentElement.parentElement)
     let result
     if(e.target.classList.contains('pullMod')){
         result = await pullMod(modInfo)

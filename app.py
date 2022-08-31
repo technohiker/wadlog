@@ -166,7 +166,6 @@ def login_status():
 @app.route('/api/add_mod',methods=['POST'])
 def add_mod():
     """Add mod info.  Meant to be called via Axios."""
-
     if not g.user:
         flash("Please login to add a mod.", "danger")
         return jsonify({
