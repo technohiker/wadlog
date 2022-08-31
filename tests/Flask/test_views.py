@@ -5,9 +5,8 @@ from dotenv import load_dotenv
 from app import CURR_USER_KEY, app
 from models import db, Users, Mods, Records, Comments
 
+#Load ENV to get environment variables before loading app.
 load_dotenv()
-
-# Now we can import app
 
 from app import app
 

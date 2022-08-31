@@ -1,36 +1,16 @@
-.no-bullets{
+
+.navbar-nav{
+    flex-direction: row;
+}
+.noBullets{
     list-style-type: none;
     padding-left: 0rem;
 }
-.max-content{
+.maxContent{
     width:max-content;
 }
 .usersInfo{
     margin-right: 20px;
-}
-.scrollBox{
-    height: 70%; overflow-y:scroll;
-}
-
-.searchForm{
-    border: 1px;
-    border-style: solid;
-    box-shadow: 3px 4px 3px black;
-    border-width: 100px groove;
-    border-color: red;
-    display: inline-block;
-    padding: 5px;
-}
-
-.hiddenValue{
-    display: none;
-}
-
-.searchedMod{
-    display: inline-block;
-    width: 65%;
-    border-color: red;
-    margin-top: 10px;
 }
 
 .mediumAvatar{
@@ -54,8 +34,29 @@
     width: 150px;
 }
 
-.navbar-nav{
-    flex-direction: row;
+.scrollBox{
+    height: 70%; overflow-y:scroll;
+}
+
+.searchForm{
+    border: 1px;
+    border-style: solid;
+    box-shadow: 3px 4px 3px black;
+    border-width: 100px groove;
+    border-color: red;
+    display: inline-block;
+    padding: 5px;
+}
+
+.hiddenValue{
+    display: none;
+}
+
+.searchedMod{
+    display: inline-block;
+    width: 65%;
+    border-color: red;
+    margin-top: 10px;
 }
 
 .idImage{
@@ -96,11 +97,4 @@
     margin-top: 10px;
     margin-right: 10px;
     margin-bottom: 5px;
-}
-
-.container-fluid label{
-    align-items:flex-start;
-}
-.container-fluid input{
-    align-items: flex-end;
 }

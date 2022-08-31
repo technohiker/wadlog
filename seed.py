@@ -1,15 +1,9 @@
-#Copied & Pasted from Springboard's provided Seed file.
-
-from csv import DictReader, excel
 from app import db
 from models import Users, Mods, Records, Comments
 
-
 db.drop_all()
 db.create_all()
-
     
-
 #Users(2)
 
 u1 = {
@@ -54,7 +48,6 @@ m2 = {
     "rating": 2.6921,
     "rating_count": 458
 }
-
 
 m3 = {
     "title": "ALIENS Total Conversion",

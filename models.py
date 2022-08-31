@@ -1,6 +1,4 @@
-
-from datetime import datetime, date
-from sqlalchemy import UniqueConstraint
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -48,18 +46,6 @@ class Users(db.Model):
         default='/static/images/default_profile.png',
         nullable=False)
 
-    #records = db.relationship('records')
-
-  #  comments = db.relationship('comments')
-
-  #  logs = db.relationship('logs',
-  #      secondary='records'
-  #      )
-  #  comments_rec = db.relationship('comments',foreign_keys='target_user')
-
-  # [print(log) for log in mod.logs for mod in user1.records]
-
-    #Register user.
     @classmethod
     def signup(cls, username, password, email, image_url='/static/images/default_profile.png'):
         """Sign up user.
@@ -212,7 +198,7 @@ class Records(db.Model):
 
     play_status = db.Column(
         db.Text,
-        nullable=False, #Should probably be enum.
+        nullable=False,
         default="Not Playing"
     )
 
@@ -240,44 +226,6 @@ class Records(db.Model):
             'play_status': self.play_status,
             'now_playing': self.now_playing
         }
-
-# class Logs(db.Model):
-
-#     __tablename__ = 'logs'
-
-#     def __repr__(self):
-#         return f'<Log: #{self.id} record: #{self.record_id}, {self.activity_type}, {self.description}'
-
-#     id = db.Column(
-#         db.Integer,
-#         primary_key=True,
-#         autoincrement=True)
-    
-#     record_id = db.Column(
-#         db.Integer,
-#         db.ForeignKey('records.id',ondelete='cascade')
-#     )
-    
-#     date_added = db.Column(
-#         db.DateTime,
-#         nullable=False
-#     )
-
-#     activity_type = db.Column(
-#         db.Text,
-#         nullable=False #Should probably be enum.
-#     )
-
-#     description = db.Column(
-#         db.Text,
-#         nullable=False
-#     )
-
-#   #  user = db.relationship('Users',secondary='records', backref='logs')
-#     record = db.relationship('Records',backref='logs',cascade="all, delete")
-#   #  mod = db.relationship('Mods', secondary='records',backref='logs')
-
-#   # Enabling the above relationships causes SQLAlchemy warnings about conflicting relationships.
 
 class Comments(db.Model):
 

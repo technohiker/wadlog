@@ -1,7 +1,5 @@
-from ast import Pass
-import email
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, FloatField, EmailField, BooleanField, PasswordField, TextAreaField
+from wtforms import StringField, SelectField, EmailField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired, Length, Email
 
 class RegistrationForm(FlaskForm):

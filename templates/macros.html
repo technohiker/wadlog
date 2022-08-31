@@ -1,5 +1,5 @@
     {% macro create_mod_card(mod) %}
-    <div class="card border-primary mt-3 max-content">
+    <div class="card border-primary mt-3 maxContent">
         <a href="{{ url_for('get_mod', mod_id = mod.id) }}" class="smallCard">
             <div class="card-header">
                 <h5 class="card-title">Title: {{mod.title}}</h5>
@@ -10,10 +10,11 @@
     {% endmacro %}
 
     {% macro create_record_card(record) %}
-        <div class="card border-primary mt-3 max-content">
+        <div class="card border-primary mt-3 maxContent">
             <a href="{{ url_for('get_record', record_id = record.id) }}" class="smallCard">
                 <div class="card-header">
                     <h5 class="card-subtitle">Record: {{record.mod.title}}</h5>
+                    <h6 class="card-subtitle">User: {{record.user.username}}</h5>
                 </div>
             </a>
         </div>

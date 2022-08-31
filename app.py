@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
-from re import search
-from datetime import date, datetime
+from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
 import requests
@@ -19,9 +18,6 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     f"postgresql://{os.getenv('SQLALCHEMY_USER')}:{os.getenv('SQLALCHEMY_PASSWORD')}@{os.getenv('SQLALCHEMY_HOST')}:5432/{os.getenv('SQLALCHEMY_DATABASE')}"
-
-    # psql -h <REMOTE HOST> -p <REMOTE PORT> -U <DB_USER> <DB_NAME>
-
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -64,6 +60,7 @@ def front_page():
 
 @app.route('/search',methods=['GET','POST'])
 def search_page():
+    """Pull up search form.  When submitted, make request to Idgames archive."""
     
     form = GetModsForm()
     if (request.method == 'POST'):
@@ -75,7 +72,6 @@ def search_page():
 
         response = requests.get(f'{uri}?action=search&query={query}&type={api_type}&sort={sort}&dir={dir}&out=json')
         return json.loads(response.content)
-
     
     return render_template('search.html',form=form)
 
@@ -157,6 +153,8 @@ def logout():
 
 @app.route('/api/login_status',methods=['GET'])
 def login_status():
+    """Check if the user is logged in or not."""
+
     if CURR_USER_KEY in session:
         return jsonify({"status": "True"})
 
@@ -167,6 +165,7 @@ def login_status():
 
 @app.route('/api/add_mod',methods=['POST'])
 def add_mod():
+    """Add mod info.  Meant to be called via Axios."""
 
     if not g.user:
         flash("Please login to add a mod.", "danger")
@@ -193,12 +192,13 @@ def add_mod():
 
 @app.route('/mods',methods=['GET'])
 def mod_list():
+    """Pull list of all mods."""
     mods = Mods.query.order_by(Mods.title.asc()).all()
     return render_template('mods.html',mods=mods)
 
 @app.route('/mods/<int:mod_id>',methods=['GET','POST'])
 def get_mod(mod_id):
-    
+    """Retrieve info about one particular mod."""
     mod = Mods.query.get(mod_id)
     if(request.method == 'POST'):
         if(g.user):
@@ -216,6 +216,7 @@ def get_mod(mod_id):
 
 @app.route('/mods/<int:mod_id>/delete',methods=['POST'])
 def delete_mod(mod_id):
+    """Delete a mod record."""
     if(g.user):
         Mods.query.filter_by(id=mod_id).delete()
         flash('Mod successfully removed.')
@@ -249,6 +250,7 @@ def create_mod(m_json):
 
 @app.route('/records',methods=['GET'])
 def record_list():
+    """Returns all records.  Users are also returned for sorting purposes."""
     records = Records.query.all()
     all_users = Users.query.all()
     users = [u for u in all_users if u.records != []]
@@ -256,11 +258,13 @@ def record_list():
 
 @app.route('/records/<int:record_id>',methods=['GET'])
 def get_record(record_id):
+    """Returns one particular record."""
     record = Records.query.get_or_404(record_id)
     return render_template('record.html',record=record)
 
 @app.route('/api/add_record/<int:mod_id>',methods=['POST'])
 def add_record(mod_id):
+    """Add a record based on a mod."""
     if(g.user):
         try:
             record = Records(user_id=g.user.id,mod_id=mod_id)
@@ -283,6 +287,7 @@ def add_record(mod_id):
 
 @app.route('/records/<int:record_id>/edit',methods=['GET','POST'])
 def edit_record(record_id):
+    """Edit record information."""
     if not g.user:
         flash("Unauthorized access.","danger")
         return redirect(f'/records/{record_id}')
@@ -303,6 +308,7 @@ def edit_record(record_id):
 
 @app.route('/records/<int:record_id>',methods=['POST'])
 def delete_record(record_id):
+    """Delete a record."""
     mod_id = Records.query.filter_by(id=record_id).first().mod_id
     if(g.user):
         Records.query.filter_by(id=record_id).delete()
@@ -317,17 +323,20 @@ def delete_record(record_id):
 
 @app.route('/users',methods=['GET'])
 def user_list():
+    """Return all users."""
     users = Users.query.order_by(Users.username.asc()).all()
     return render_template('users.html',users=users)
 
 @app.route('/users/<int:user_id>',methods=['GET'])
 def get_user(user_id):
+    """Return one user."""
     user = Users.query.get_or_404(user_id)
     comments = Comments.query.filter_by(target_user_id=user_id)
     return render_template('user.html',user=user,comments=comments)
 
 @app.route('/users/<int:user_id>/edit',methods=['GET','POST'])
 def edit_user(user_id):
+    """Edit user info."""
     if not g.user:
         flash('Unauthorized access.',"danger")
         return redirect(f'/users/{user_id}')
@@ -354,6 +363,7 @@ def edit_user(user_id):
 
 @app.route('/api/comments/add',methods=['POST'])
 def add_comment():
+    """Adds a comment.  Meant to be called with Axios."""
     if(g.user):
         data = json.loads(request.data)
         comment = Comments(

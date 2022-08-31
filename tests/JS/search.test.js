@@ -71,9 +71,11 @@ describe("Test JS code for fetching mod information from Idgames.", () =>{
                 }
             }
 
+            //Set up call.
             testRequest.open('POST',apiResource)
             testRequest.send();
 
+            //Check that URL is set up.  Should not be called yet.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource)
             expect(spySuccess).not.toHaveBeenCalled()
     
@@ -126,7 +128,7 @@ describe("Add mod info to Mods or Records tables.",()=>{
                         <h2><a href="http://www.testurl.com" id="search-title"  json="title" val="Test Game" class="title valuePull">Test Game</a></h2>
                     </div>
                     <div class="card-body d-flex flex-row">
-                        <ul class="d-flex flex-column flex-wrap col-sm-3 no-bullets">
+                        <ul class="d-flex flex-column flex-wrap col-sm-3 noBullets">
                             <li class="valuePull" json="author" val="Tom Hall"><b>Author:</b>Tom Hall</li>
                             <li class="valuePull" json="date" val="2003-01-02"><b>Release Date:</b>2003-01-03</li>
                                 <li class="valuePull" id="search-rating" json="rating" val="4.53"><b>Score:</b> 4.53 of 5</li>
@@ -172,10 +174,11 @@ describe("Add mod info to Mods or Records tables.",()=>{
                     spySuccess(this.response)
                 }
             }
-
+            //Set up first call.
             testRequest.open('POST',apiResource1)
             testRequest.send();
 
+            //Check URL, should not have called yet.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource1)
             expect(spySuccess).not.toHaveBeenCalled()
     
@@ -194,6 +197,7 @@ describe("Add mod info to Mods or Records tables.",()=>{
             testRequest.open('POST',apiResource2)
             testRequest.send();
 
+            //Check that URL was changed.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource2)
             
             //Make second call.

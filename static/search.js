@@ -15,33 +15,32 @@ searchForm.addEventListener('submit', function(e){
  *  Pulls info from Idgames API, then converts it into HTML.
  */
 async function searchEvent(e){
-    data = await showMods(e)
+    json = {
+        "query": f_query.value,
+        "type": f_type.value,
+        "sort": f_sort.value,
+        "dir": f_dir.value
+    }
+    data = await showMods(json)
+
     modContainer.innerHTML = ''
-    console.log(data.file)
+
     if(data.file.length == undefined){
         data = jsonFormat(data)
     }
+
     htmlMod = makeModObject(data)
+
     modContainer.innerHTML = htmlMod
     hideButtons(modContainer)
 }
 
-/** Use search form info to pull info from Idgames API. */
-async function showMods(e){
+/** Use search form info to pull info from Idgames API. 
+ * Calls Flask instead of Idgames directly to get around CSRF.
+*/
+async function showMods(json){
 
-    let uri = 'https://www.doomworld.com/idgames/api/api.php'
-
-    let query = f_query.value;
-    let type = f_type.value;
-    let sort = f_sort.value;
-    let dir = f_dir.value;
-
-    response = await axios.post('/search',{
-        query: query,
-        type: type,
-        sort: sort,
-        dir: dir
-    })
+    response = await axios.post('/search',json)
     return response.data.content
 }
 
@@ -82,29 +81,31 @@ function hideButtons(html){
 }
 }
 
-
 async function clickEventListener(e){
     e.preventDefault()
     let modInfo = jsonBuilder(e.target.parentElement)
     let result
     if(e.target.classList.contains('pullMod')){
-        result = await pullMod(modInfo, false)
+        result = await pullMod(modInfo)
     }
     else if(e.target.classList.contains('addMod')){
-        result = await addMod(modInfo, true)
+        result = await addMod(modInfo)
     }
     e.target.innerText = result.status
     e.target.disabled = true
 }
 
-async function pullMod(json,addRecord){
+/** Send HTML info of mod record to database.*/
+async function pullMod(json){
     response = await axios.post('/api/add_mod', json)
 
     return response.data
 }
 
+/** Add a mod recorded in the database to Records table.
+ * If mod doesn't exist, add it.
+ */
 async function addMod(json){
-//     -When button is clicked, check if mod is added to database.  If not, add it.
     result = await pullMod(json)
 
     response = await axios.post(`/api/add_record/${result.mod_id}`)

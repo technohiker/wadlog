@@ -3,19 +3,13 @@
 
 {% block content %}
 <h2><u>Records:</u></h2>
-<!--
-    {% for record in records %}
-        {{ create_record_card(record) }}
-    {% endfor %}
--->
     {% for user in users %}
-    <div class="card flex-row mt-3 max-content">
+    <div class="card flex-row mt-3 maxContent">
         <a href="{{ url_for('get_user', user_id = user.id) }}">    
             <img class="smallAvatar col-sm-4" src="{{user.image_url}}">
         </a>
         <p class="userText">{{user.username}}</p>
     </div>
-        <h4><u>{{user.username}}:</u></h4>
         <ul>
         {% for record in user.records %}
             <li>{{create_record_card(record)}}</li>

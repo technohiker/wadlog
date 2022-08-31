@@ -154,7 +154,7 @@ describe("Add mod info to Mods or Records tables.",()=>{
                         <h2><a href="http://www.testurl.com" id="search-title"  json="title" val="Test Game" class="title valuePull">Test Game</a></h2>
                     </div>
                     <div class="card-body d-flex flex-row">
-                        <ul class="d-flex flex-column flex-wrap col-sm-3 no-bullets">
+                        <ul class="d-flex flex-column flex-wrap col-sm-3 noBullets">
                             <li class="valuePull" json="author" val="Tom Hall"><b>Author:</b>Tom Hall</li>
                             <li class="valuePull" json="date" val="2003-01-02"><b>Release Date:</b>2003-01-03</li>
                                 <li class="valuePull" id="search-rating" json="rating" val="4.53"><b>Score:</b> 4.53 of 5</li>

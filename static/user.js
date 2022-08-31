@@ -33,7 +33,6 @@ async function postComment(text, target_user){
 }
 /** Use Handlebars to generate a template so a posted comment shows up immediately. */
 function htmlBuilder(comment){
-    console.log(comment)
     let hbTemplate = document.getElementById('commentTemplate').innerHTML
     let compiledHTML = Handlebars.compile(hbTemplate)
     let generatedHTML = compiledHTML(comment)
@@ -41,7 +40,6 @@ function htmlBuilder(comment){
     let newComment = document.createElement('p')
 
     newComment.innerHTML = generatedHTML
-    console.log(newComment)
 
     return newComment
 }
