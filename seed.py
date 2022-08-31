@@ -114,79 +114,6 @@ r4 = {
 db.session.add_all([Records(**r1),Records(**r2),Records(**r3),Records(**r4)])
 db.session.commit()
 
-#Logs(9)
-
-    #User1 got a mod.
-    #User1 got another mod.
-    #User1 started the first mod.
-    #User1 finished the first mod.
-    #User1 wrote a review of the first mod.
-    #User2 got a mod.
-    #User2 got another mod.
-    #User2 started the second mod.
-    #User2 deleted the second mod.
-
-# ul1 = {
-#     "record_id": 1,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Added Mod',
-#     "description": 'User added Scythe 2.'
-# }
-
-# ul2 = {
-#     "record_id": 2,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Added Mod',
-#     "description": 'User added Hell Revealed'
-# }
-# ul3 = {
-#     "record_id": 1,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Started Playing',
-#     "description": 'User started playing Scythe 2.'
-# }
-# ul4 = {
-#     "record_id": 1,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Finished Playing',
-#     "description": 'User finished playing Scythe 2.'
-# }
-# ul5 = {
-#     "record_id": 1,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Review',
-#     "description": 'User wrote a review for Scythe 2.'
-# }
-# ul6 = {
-#     "record_id": 3,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Added Mod',
-#     "description": 'User2 added Hell Revealed.'
-# }
-# ul7 = {
-#     "record_id": 4,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Added Mod',
-#     "description": 'User2 added ALIENS Total Conversion.'
-# }
-# ul8 = {
-#     "record_id": 3,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Started Playing',
-#     "description": 'User2 started playing Hell Revealed.'
-# }
-# ul9 = {
-#     "record_id": 3,
-#     "date_added": '2022-01-03',
-#     "activity_type": 'Deleted Mod',
-#     "description": 'User2 deleted Hell Revealed.'
-# }
-
-# db.session.add_all([Logs(**ul1),Logs(**ul2),Logs(**ul3),
-#     Logs(**ul4),Logs(**ul5),Logs(**ul6),Logs(**ul7),
-#     Logs(**ul8),Logs(**ul9)])
-# db.session.commit()
-
 #Comments(3)
     #User1 comments on User2's mod pick.
     #User2 responds saying that he was disappointed.
@@ -211,19 +138,3 @@ c3 = {
 
 db.session.add_all([Comments(**c1),Comments(**c2),Comments(**c3)])
 db.session.commit()
-
-# c1 = Cupcakes(
-#     flavor="cherry",
-#     size="large",
-#     rating=5,
-# )
-
-# c2 = Cupcakes(
-#     flavor="chocolate",
-#     size="small",
-#     rating=9,
-#     image="https://www.bakedbyrachel.com/wp-content/uploads/2018/01/chocolatecupcakesccfrosting1_bakedbyrachel.jpg"
-# )
-
-# db.session.add_all([c1, c2])
-# db.session.commit()

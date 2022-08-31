@@ -17,11 +17,13 @@ searchForm.addEventListener('submit', function(e){
 async function searchEvent(e){
     data = await showMods(e)
     modContainer.innerHTML = ''
+    console.log(data.file)
     if(data.file.length == undefined){
         data = jsonFormat(data)
     }
-    makeModObject(data)
-    hideButtons()
+    htmlMod = makeModObject(data)
+    modContainer.innerHTML = htmlMod
+    hideButtons(modContainer)
 }
 
 /** Use search form info to pull info from Idgames API. */
@@ -40,7 +42,6 @@ async function showMods(e){
         sort: sort,
         dir: dir
     })
-
     return response.data.content
 }
 
@@ -49,7 +50,6 @@ async function showMods(e){
  */
 function jsonFormat(json){
     //Array is still named 'file' in order to match the Handlebar template's syntax.
-    
     let file = []
 
     file.push(json.file)
@@ -59,19 +59,19 @@ function jsonFormat(json){
 }
 
 /** Convert JSON into HTML object with Handlebars. */
-async function makeModObject(json){
+function makeModObject(json){
 
         let hbTemplate = document.getElementById('htmlTemplate').innerHTML
         let compiledHTML = Handlebars.compile(hbTemplate)
         let generatedHTML = compiledHTML(json)
 
-        modContainer.innerHTML = generatedHTML
+        return generatedHTML
 }
 
 /** Hide form buttons.  Called when user is not logged in. */
-function hideButtons(){
+function hideButtons(html){
 
-    buttons = document.querySelectorAll('.modButton')
+    buttons = html.querySelectorAll('.modButton')
     for(i = 0; i < buttons.length; i++){
         if(!document.cookie.includes('user')){
             buttons[i].style.display = 'none'
@@ -82,21 +82,22 @@ function hideButtons(){
 }
 }
 
+
 async function clickEventListener(e){
     e.preventDefault()
     let modInfo = jsonBuilder(e.target.parentElement)
     let result
     if(e.target.classList.contains('pullMod')){
-        result = await pullMod(modInfo)
+        result = await pullMod(modInfo, false)
     }
     else if(e.target.classList.contains('addMod')){
-        result = await addMod(modInfo)
+        result = await addMod(modInfo, true)
     }
     e.target.innerText = result.status
     e.target.disabled = true
 }
 
-async function pullMod(json){
+async function pullMod(json,addRecord){
     response = await axios.post('/api/add_mod', json)
 
     return response.data
@@ -111,6 +112,7 @@ async function addMod(json){
     return response.data
 }
 
+/** Take specific values from HTML object and create a JSON object out of them. */
 function jsonBuilder(obj){
     let values = obj.querySelectorAll('.valuePull')
     let json = {};

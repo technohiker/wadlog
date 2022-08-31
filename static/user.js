@@ -9,24 +9,24 @@ const userid = document.querySelector('div[userid]').getAttribute('userid')
 
 commentForm.addEventListener('submit',e => {
     e.preventDefault()
-    createComment(e)
+    createComment(e.target.children[0].children[0]) //Send textarea object.
 })
 
-async function createComment(e){
-    comment = await postComment(commentText.value)
+async function createComment(textArea){
+    comment = await postComment(textArea, userid)
     if(comment.data.status == 'Unauthorized access.'){
         return
     }
     newComment = htmlBuilder(comment.data)
     userComments.appendChild(newComment)
-    commentText.value = ''  //Remove user's comment after it is posted.
+    textArea.value = ''  //Remove user's comment after it is posted.
 }
 
 /** Send comment to database, then return data to use on client side. */
-async function postComment(text){
+async function postComment(text, target_user){
     data = {
         "comment": text,
-        "target_user_id": userid
+        "target_user_id": target_user
     }
     response = await axios.post('/api/comments/add',data)
     return response

@@ -43,6 +43,12 @@
         </form>
     {% endif %}
     
+    <p>
+        <form action="{{ url_for('user_list')}}" method="GET">
+            <button class="btn btn-secondary btnPadding">Return to Users</button>
+        </form>
+    </p>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
     <script src="/static/user.js"></script>
     {% raw %}
@@ -62,14 +68,4 @@
     </script>
     {% endraw %}
 
-    <p><form action="{{ url_for('user_list')}}" method="GET">
-        <button class="btn btn-secondary btnPadding">Return to Users</button>
-    </form>
-    </p>
-    <link rel="stylesheet"
-    href="https://unpkg.com/jasmine-core/lib/jasmine-core/jasmine.css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine-html.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/boot.js"></script>      
-  <script src="/static/user.test.js"></script>
 {% endblock %}
