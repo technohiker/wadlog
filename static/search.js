@@ -29,7 +29,9 @@ async function searchEvent(e){
         data = jsonFormat(data)
     }
 
-    htmlMod = makeModObject(data)
+    cleanData = removeBRTags(data)
+
+    htmlMod = makeModObject(cleanData)
 
     modContainer.innerHTML = htmlMod
     hideButtons(modContainer)
@@ -41,6 +43,14 @@ async function searchEvent(e){
 async function showMods(data){
     response = await axios.post('/search',data)
     return response.data.content
+}
+/** Removes any <br> tags in strings and replaces them with proper line breaks. */
+function removeBRTags(json){
+    console.log(json)
+    for(file of json.file){
+        file['description'] = file['description'].replaceAll( "<br>",'\n')
+    }
+    return json
 }
 
 /** Build Idgames response into a proper JSON object.

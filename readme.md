@@ -1,68 +1,24 @@
-# API Calls:
--  ## SEARCH:
-    -   Call
-    -   ID
-    -   Title
-    -   Size
-    -   Date
-    -   Author
-    -   Description
-    -   Rating
-    -   Votes
-    -   URL
-    -   
--   ## GET:
-    -   Gets file information by ID.  Uses the same parameters as above to update mod info.
+# Doom Mod Records
 
-# Schema Design:
--   ## Mods:
-    -   ID SERIAL PRIMARY KEY,
-    -   Title TEXT NOT NULL,
-    -   File-ID INTEGER NOT NULL,
-    -   URL TEXT NOT NULL,
-    -   Description TEXT,
-    -   Date Uploaded TIMESTAMP NOT NULL,
-    -   Date Updated TIMESTAMP NOT NULL,
-    -   Author TEXT NOT NULL,
-    -   Category TEXT NOT NULL,(pull from idgamesurl or URL, requires   substring)
-    -   Rating INTEGER,
-    -   Rating Count INTEGER NOT NULL
--   ## Users:
-    -   ID SERIAL PRIMARY KEY,
-    -   Username TEXT NOT NULL,
-    -   Email TEXT NOT NULL,
-    -   Password TEXT NOT NULL,
-    -   Date Joined TIMESTAMP NOT NULL,
-    -   Profile Picture TEXT
--   ## User-Mods:
-    -   ID SERIAL PRIMARY KEY,
-    -   User ID INTEGER FOREIGN KEY,
-    -   Mod ID INTEGER FOREIGN KEY,
-    -   Date Added TIMESTAMP NOT NULL,
-    -   User Review TEXT,
-    -   User Notes TEXT,
-    -   Play Status TEXT,
-    -   Now Playing BOOLEAN NOT NULL
--   ## User Log:
-    -   ID SERIAL PRIMARY KEY,
-    -   User-Mod ID INTEGER FOREIGN KEY,
-    -   Date Added, TIMESTAMP,
-    -   Activity Type(rating, started playing, added mod, etc.)
-    -   Description(Pre-written description describing what happened
-                    ex. "User rated this mod 4 stars" or "user just removed this mod.") TEXT NOT NULL
--   ## Comment:
-    -   ID SERIAL PRIMARY KEY,
-    -   User ID INTEGER FOREIGN KEY,
-    -   Target User INTEGER FOREIGN KEY,
-    -   Timestamp, TIMESTAMP NOT NULL
-    -   Text, TEXT NOT NULL
--   ## Questions:
-    -   What is the best way of handling the record vs each log of a record?
+## Description:
+This website allows you to look up various mods for the mid-90s PC games Doom and Doom 2.  Upon booting up the website, you will be presented a form.  Here, you can look up any mod by author, title, or the mod's filename.  Submitting this form will pull up all of the mods that meet the given criteria.  You may then add these to the application's database so they may be permanently stored for future reference.  There is also an option to add the mod as a Record, which shows that you have the mod, and any notes you might want to write for it.
 
+## Search Examples:
+There are currently a few mods already available for viewing in the website.  Why not use them as a starting point to see what to search for?  You could search up the author of one of these mods to see what else they made.
+
+## Tools Used:
+Routes for the website were written in Python with the Flask framework, with HTML templates created with Jinja.  Requests are made to https://www.doomworld.com/idgames, an archive for the vast majority of Doom mods.  PostgreSQL and SQLAlchemy were used for creating and accessing the database.  Python tests were handled with Unittest, and all JavaScript tests were done with Jasmine.
+
+## How to View:
+-   ### __Heroku:__
+    -   The website may be viewed and used on [Heroku](https://doom-mod-records.herokuapp.com).
+
+-   ### __Clone Repository:__
+    -   If you wish to download the application yourself, clone the Git repository, and install dependencies from requirements.txt with Pip.  You must create your own Postgres database in order to generate the models needed to create objects like Users and Records.  There is a seed.py file to create tables and populate the database for you.  Next, make a .env file with your database information as environment variables.  An example file has been provided to show what the variables should look like.  Once all this is set up,  run Flask in the terminal, and you should not be able to run the website.
+
+## Recollections:
+Being the first project I've done on this kind of scale, I felt it was appropriate to write a more detailed summary of my experiences creating this application.  This can be found [here](reflections.md).
 
 # Image Sources:
 -   Default user image: https://feedback.seekingalpha.com/s/cache/8d/84/8d844a1bb966f7012aec20276f0e4283.png
-
-# Lessons Learned:
--   Secondary argument of SQLAlchemy relationships should only be used if many-to-many table exists solely to connect two tables together.
--   Do not make names of models so similar.  Will cause confusion.
+-   Idgames image: https://www.doomworld.com/favicon.ico

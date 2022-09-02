@@ -1,3 +1,30 @@
+
+
+/*
+it('test functionName().  Insert description about the goal of this test., function() {
+    //Write data for test.
+        //let a = 10
+        //let b = 20
+    
+    //Write tests.
+        //expect(functionName(a,b)).toEqual(-10);
+        //expect(functionName(b,a)).toEqual(10);
+    
+})
+
+beforeEach() {
+    //Function used to run code before each test is ran.
+    //afterEach function exists as well.
+    //There is also beforeAll and afterAll.
+}
+*/
+
+/*
+
+How do we add HTML data?
+
+*/
+
 describe("Test JS code for fetching mod information from Idgames.", () =>{
     beforeAll(() => {
         singleMod = {
@@ -39,26 +66,27 @@ describe("Test JS code for fetching mod information from Idgames.", () =>{
                 "idgamesurl":"idgames://levels/doom2/megawads/scythe.zip"
                 },
                 {
-                "id":11944,
-                "title":"Scythe",
-                "dir":"levels/doom2/megawads/",
-                "filename":"scythe.zip",
-                "size":2086863,
-                "age":1049950800,
-                "date":"2003-04-10",
-                "author":"Erik Alm, with guest mapper Kim \"Torn\" Bach",
-                "email":"erik_a80@hotmail.com",
-                "description":"A 32 level megawad for doom2. This megawad doesn't have perfect texture alignment, insane detail and fantasticly hard gameplay. Instead it focuses on small fun maps to blast through without much thought about defense. The difficulty rises steadily as you go through the maps and the last few should challenge even the best.",
-                "rating":4.1225,
-                "votes":408,
-                "url":"https://www.doomworld.com/idgames/levels/doom2/megawads/scythe",
-                "idgamesurl":"idgames://levels/doom2/megawads/scythe.zip"
+                "id":7947,
+                "title":"Hell Revealed",
+                "dir":"levels/doom2/g-i",
+                "filename":"hr.zip",
+                "size":2322399,
+                "age":862556400,
+                "date":"1997-05-02",
+                "author":"Yonatan Donner and Haggay Niv",
+                "email":"ruthd@post.tau.ac.il",
+                "description":"Hell Revealed is a megawad, a 32-level replacement for DooM II, created by Yonatan Donner and Haggay Niv. <br><br> In Hell Revealed, you will find: 32 new high-quality very detailed levels, many new graphics including textures, flats, skies, status bars and others, full skill-level support and additional attention to coop-players, and extreme challenge. <br><br> Hell Revealed supports single player, cooperative (with additional weapons and enemies) and several maps have special DM parts (maps 1 and 2 are especially good for deathmatch).",
+                "rating":2.6921,
+                "votes":458,
+                "url":"https://www.doomworld.com/idgames/themes/hr/hr",
+                "idgamesurl":"idgames://themes/hr/hr.zip"
                 }]
             }
         }
     })
 
     it("Receive info from Idgames website. showMods()",() => {
+        //showMods()
         let spySuccess = jasmine.createSpy('sendMod')
         let apiResource = 'https://www.doomworld.com/idgames/api/api.php?action=search&query=scythe&type=title'
         jasmine.Ajax.withMock(function() {
@@ -71,11 +99,9 @@ describe("Test JS code for fetching mod information from Idgames.", () =>{
                 }
             }
 
-            //Set up call.
             testRequest.open('POST',apiResource)
             testRequest.send();
 
-            //Check that URL is set up.  Should not be called yet.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource)
             expect(spySuccess).not.toHaveBeenCalled()
     
@@ -94,6 +120,12 @@ describe("Test JS code for fetching mod information from Idgames.", () =>{
     it("Convert info from Idgames into a json object with length, for proper iteration.  jsonFormat()",() => {
         data = jsonFormat(singleMod.content)
         expect(data.file.length).toBeDefined()
+    })
+    it("Remove any <br> strings from text, and replace with actual line breaks. removeBRTags()",() =>{
+        let testData = doubleMod.content
+        expect(testData['file'][1]['description']).toContain('<br>')
+        newTestData = removeBRTags(testData)
+        expect(newTestData['file'][1]['description']).not.toContain('<br>')
     })
     it("Create an HTML object out of the searched mod. makeModObject()",() => {
         data1 = jsonFormat(singleMod.content)
@@ -174,11 +206,10 @@ describe("Add mod info to Mods or Records tables.",()=>{
                     spySuccess(this.response)
                 }
             }
-            //Set up first call.
+
             testRequest.open('POST',apiResource1)
             testRequest.send();
 
-            //Check URL, should not have called yet.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource1)
             expect(spySuccess).not.toHaveBeenCalled()
     
@@ -197,7 +228,6 @@ describe("Add mod info to Mods or Records tables.",()=>{
             testRequest.open('POST',apiResource2)
             testRequest.send();
 
-            //Check that URL was changed.
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(apiResource2)
             
             //Make second call.

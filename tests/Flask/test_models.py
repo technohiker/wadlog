@@ -1,5 +1,4 @@
 import os
-from datetime import date, datetime
 from unittest import TestCase
 from dotenv import load_dotenv
 

@@ -1,39 +1,7 @@
-
-
-/*
-it('test functionName().  Insert description about the goal of this test., function() {
-    //Write data for test.
-        //let a = 10
-        //let b = 20
-    
-    //Write tests.
-        //expect(functionName(a,b)).toEqual(-10);
-        //expect(functionName(b,a)).toEqual(10);
-    
-})
-
-beforeEach() {
-    //Function used to run code before each test is ran.
-    //afterEach function exists as well.
-    //There is also beforeAll and afterAll.
-}
-*/
-
-/*
-
-How do we add HTML data?
-
-*/
-
 describe("Test the ability for a user to add a comment.", function() {
-    let comment;
-    let sentComment;
     let testResponse;
-    let spy;
 
     beforeAll(() => {
-     //   jasmine.Ajax.install()
-
         testResponse = {
             'id': 4,
             'user_id': 3,
@@ -73,23 +41,11 @@ describe("Test the ability for a user to add a comment.", function() {
             expect(spySuccess).toHaveBeenCalledWith(testResponse)
             expect(spySuccess).toHaveBeenCalledTimes(1)
         })
-        
-
-     //   spyOn()
-
-
-
-        //Should expect receivedComment object.  No status code.
     });
-    it('Should use comment info to properly generate HTML.',function(){
+    it('Should use comment info to properly generate HTML. htmlBuilder()',function(){
         data = htmlBuilder(testResponse)
         expect(htmlBuilder(testResponse).innerHTML).toContain('User: ');
         expect(htmlBuilder(testResponse).innerHTML).toContain('</div>');
         expect(htmlBuilder(testResponse).innerHTML).toContain('Mon, 22 Aug 2022 21:28:43 GMT');
-        //htmlBuilder()
-    })
-
-    afterAll(() => {
-     //   jasmine.Ajax.uninstall()
     })
 });
