@@ -13,7 +13,7 @@ commentForm.addEventListener('submit',e => {
 })
 
 async function createComment(textArea){
-    comment = await postComment(textArea, userid)
+    comment = await postComment(textArea.value, userid)
     if(comment.data.status == 'Unauthorized access.'){
         return
     }

@@ -54,15 +54,17 @@
     {% raw %}
     <script id="commentTemplate" type="text/x-handlebars-template">
             <div class="card commentCard">
-                <div class="card-header flex-row">
-                <a href="/users/{{user_id}}" class="col-sm-2">
-                    <img class="smallAvatar" src="{{pfp}}">
-                </a>
-                <article class="col-sm-12">User: {{sender}}</article>
+                <div class="card-header d-flex flex-row">
+                    <a href="/users/{{user_id}}">
+                        <img class="smallAvatar" src="{{pfp}}">
+                    </a>
+                    <div class="d-flex flex-column commentInfo">
+                        <span>User: {{sender}}</span>
+                        <span>Sent: {{time}}</span>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <p class="col-sm-10 card-text">{{text}}</p>
-                    <span class="col-sm-2">Sent: {{time}}</span>
+                    <p class="card-text">{{text}}</p>
                 </div>
             </div>
     </script>
