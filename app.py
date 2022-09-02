@@ -376,3 +376,7 @@ def add_comment():
     return jsonify({
         "status": "Unauthorized access."
     })
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html',error=3),404
