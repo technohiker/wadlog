@@ -25,16 +25,21 @@ async function searchEvent(e){
 
     modContainer.innerHTML = ''
 
-    if(data.file.length == undefined){
-        data = jsonFormat(data)
+    try{
+        if(data.file.length == undefined){
+            data = jsonFormat(data)
+        }
+    
+        cleanData = removeBRTags(data)
+    
+        htmlMod = makeModObject(cleanData)
+    
+        modContainer.innerHTML = htmlMod
+        hideButtons(modContainer)
     }
-
-    cleanData = removeBRTags(data)
-
-    htmlMod = makeModObject(cleanData)
-
-    modContainer.innerHTML = htmlMod
-    hideButtons(modContainer)
+    catch(error){
+        modContainer.innerHTML = 'No file found.  Please check if you typed your search in correctly.'
+    }
 }
 
 /** Use search form info to pull info from Idgames API. 
