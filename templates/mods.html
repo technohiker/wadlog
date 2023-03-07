@@ -2,10 +2,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2><u>Mods:</u></h2>
-    <ul class="d-flex flex-column">
+<div class="my-2"><h2><u>Mods Stored:</u></h2></div>
+    <div class="row">
         {% for mod in mods %}
+          <div class="col">
             {{ create_mod_card(mod) }}
+          </div>
+          {% if loop.index % 3 == 0 %}
+                </div><div class="row">
+          {% endif %}
         {% endfor %}
     </ul>
 {% endblock %}

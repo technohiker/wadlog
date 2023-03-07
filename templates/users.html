@@ -1,25 +1,39 @@
 {% from 'macros.html' import create_user_object with context %}
+{% from 'macros.html' import create_record_card with context %}
 {% extends 'base.html' %}
 
 {% block content %}
     <h2><u>Users:</u></h2>
     <div class="d-flex flex-column">
         {% for user in users %}
-        <div class="card flex-row mt-3 maxContent">
-            <a href="{{ url_for('get_user', user_id = user.id) }}">    
-                <img class="mediumAvatar col-sm-4" src="{{user.image_url}}">
-            </a>
-            <ul class="col-sm-8 usersInfo">
-                <li>
-                    <a href="{{ url_for('get_user', user_id = user.id) }}">
-                        User: {{user.username}}
-                    </a>
-                </li>
-                <li>
-                    <span>Records: {{user.records | length}}</span>
-                </li>
-            </ul>
+        <div class="flex-column userContainer">
+          <div class="card flex-row mt-3 maxContent">
+          <a href="{{ url_for('get_user', user_id = user.id) }}">    
+              <img class="mediumAvatar col-sm-4" src="{{user.image_url}}">
+          </a>
+          <ul class="col-sm-8 usersInfo">
+              <li>
+                  <a href="{{ url_for('get_user', user_id = user.id) }}">
+                      User: {{user.username}}
+                  </a>
+              </li>
+              <li>
+                  <span>Records: {{user.records | length}}</span>
+              </li>
+              <li>
+                <button id="toggleRecords">Toggle Records</button>
+              </li>
+          </ul>
         </div>
+        <div class="userRecords hiddenValue" id="{{user.username}}">
+          <ul class="">
+            {% for record in user.records %}
+                <li>{{create_record_card(record)}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
         {% endfor %}
     </div>
+    <script src="/static/users.js"></script>
 {% endblock %}

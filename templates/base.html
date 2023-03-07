@@ -18,9 +18,6 @@
                 <a class="nav-link px-3" href="{{ url_for('user_list')}}">Users</a>
             </li>
             <li>
-                <a class="nav-link px-3" href="{{ url_for('record_list')}}">Records</a>
-            </li>
-            <li>
                 <a class="nav-link px-3" href="{{ url_for('search_page')}}">Search</a>
             </li>
         </ul>
@@ -47,9 +44,9 @@
     {% for msg in get_flashed_messages() %}
     <p>{{msg}}</p>
     {% endfor %}
-    <div class="container-fluid">
-    {% block content %}{% endblock %} 
-    </div>
+      <div class="container-fluid center-content d-flex flex-column">
+      {% block content %}{% endblock %} 
+      </div>
 </body>
 <script src="https://unpkg.com/jquery"></script>
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
