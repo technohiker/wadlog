@@ -70,6 +70,7 @@ def search_page():
         sort = request.json['sort']
         dir = request.json['dir']
 
+
         response = requests.get(f'{uri}?action=search&query={query}&type={api_type}&sort={sort}&dir={dir}&out=json')
         return json.loads(response.content)
     

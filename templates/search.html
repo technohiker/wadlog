@@ -3,6 +3,7 @@
 {% block content %}
 
 <h2>Pull Doom mods from Idgames archive:</h2>
+  <p class="hintText" id="hintText"></p>
     <form class="searchForm" name="formSearch" id="formSearch" method="POST">
     {{ form.hidden_tag() }}
         <p> Search {{ form.query }} in {{ form.type}} </p>
