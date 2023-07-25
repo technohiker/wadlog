@@ -1,105 +1,142 @@
-
-.navbar-nav{
-    flex-direction: row;
+.navbar-nav {
+	flex-direction: row;
 }
-.noBullets{
-    list-style-type: none;
-    padding-left: 0rem;
+.noBullets {
+	list-style-type: none;
+	padding-left: 0rem;
 }
-.maxContent{
-    width:max-content;
+.maxContent {
+	width: max-content;
 }
-.usersInfo{
-    margin-right: 20px;
-}
-
-.mediumAvatar{
-    height: 100px;
-    width: 100px;
-}
-    .mediumAvatar:hover{
-        opacity: 0.7;
-    }
-
-.smallAvatar{
-    height: 50px;
-    width: 50px;
-}
-    .smallAvatar:hover{
-        opacity: 0.7;
-    }
-
-.largeAvatar{
-    height: 150px;
-    width: 150px;
+.usersInfo {
+	margin-right: 20px;
 }
 
-.searchForm{
-    border: 1px;
-    border-style: solid;
-    box-shadow: 3px 4px 3px black;
-    border-width: 100px groove;
-    border-color: red;
-    display: inline-block;
-    padding: 5px;
+.mediumAvatar {
+	height: 100px;
+	width: 100px;
+}
+.mediumAvatar:hover {
+	opacity: 0.7;
 }
 
-.center-content{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} 
-
-.hiddenValue{
-    display: none;
+.smallAvatar {
+	height: 50px;
+	width: 50px;
+}
+.smallAvatar:hover {
+	opacity: 0.7;
 }
 
-.searchedMod{
-    display: inline-block;
-    width: 65%;
-    border-color: red;
-    margin-top: 10px;
-    height: 350px;
+.largeAvatar {
+	height: 150px;
+	width: 150px;
 }
 
-.mod-description{
-  height: 180px;
-  overflow-y:scroll;
+.searchForm {
+	border: 1px;
+	border-style: solid;
+	box-shadow: 3px 4px 3px black;
+	border-width: 100px groove;
+	border-color: red;
+	display: inline-block;
+	padding: 5px;
 }
 
-.idImage{
-    width: 35px;
-}
-    .idImage:hover{
-        opacity: 0.7;
-    }
-
-.smallCard{
-    text-decoration: none; 
-    color: black;
-}
-    .smallCard:hover{
-        opacity: 0.7;
-    }
-    
-.recordCard{
-    width: 60%;
-}
-.modCard{
-    width: 60%;
-}
-.userText{
-    padding-top: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
+.center-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.commentInfo{
-    padding-left: 2%;
+.hiddenValue {
+	display: none;
 }
 
-.btnPadding{
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 5px;
+.searchedMod {
+	display: inline-block;
+	width: 65%;
+	border-color: red;
+	margin-top: 10px;
+	height: 350px;
+}
+
+.mod-description {
+	height: 180px;
+	overflow-y: scroll;
+}
+
+.idImage {
+	width: 35px;
+}
+.idImage:hover {
+	opacity: 0.7;
+}
+
+.smallCard {
+	text-decoration: none;
+	color: black;
+}
+.smallCard:hover {
+	opacity: 0.7;
+}
+
+.recordCard {
+	width: 60%;
+}
+.modCard {
+	width: 60%;
+}
+.userText {
+	padding-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.commentInfo {
+	padding-left: 2%;
+}
+
+.btnPadding {
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
+/* From loading.io/css  */
+
+.lds-ring {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+.lds-ring div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border: 8px solid #fff;
+	border-radius: 50%;
+	animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }

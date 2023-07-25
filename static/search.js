@@ -8,9 +8,14 @@ const f_type = document.querySelector("#type");
 const f_sort = document.querySelector("#sort");
 const f_dir = document.querySelector("#dir");
 
-searchForm.addEventListener("submit", function (e) {
+const loadText = document.querySelector("#loadText");
+
+searchForm.addEventListener("submit", async function (e) {
 	e.preventDefault();
-	searchEvent(e);
+
+	loadText.classList.toggle("lds-ring");
+	await searchEvent(e);
+	loadText.classList.toggle("lds-ring");
 });
 
 hintGenerator();
