@@ -1,5 +1,4 @@
 const users = document.querySelectorAll(".userContainer");
-console.log(users);
 
 for (let user of users) {
   const records = user.querySelector(".userRecords");

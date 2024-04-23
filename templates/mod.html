@@ -23,7 +23,13 @@
                 </ul>
                 <div class="col-sm-9 mod-description">
                     <h3>Description:</h3>
-                    <article class="scrollBox">{{mod.description}}</article>
+                    <article class="scrollBox">
+                        {% if mod.description is none %}
+                        No description for this mod.
+                        {% else %}
+                        {{mod.description}}
+                        {% endif %}
+                    </article>
                 </div>
             </div>
             <div class="d-flex flex-row">
