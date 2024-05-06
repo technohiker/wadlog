@@ -23,5 +23,5 @@ python-dotenv==0.20.0
 requests==2.31.0
 SQLAlchemy==1.4.39
 urllib3==2.2.1
-Werkzeug==3.0.2
+Werkzeug==3.0.3
 WTForms==3.0.1
